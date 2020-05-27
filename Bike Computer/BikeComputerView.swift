@@ -5,8 +5,10 @@ struct BikeComputerView: View {
   @ObservedObject var viewModel = BikeComputerViewModel()
   
   var body: some View {
-    Text(viewModel.speed)
-      .animation(.easeInOut)
+    VStack {
+        Text(viewModel.speed)
+        Text(viewModel.time)
+    }.animation(.easeInOut)
   }
 }
 
