@@ -10,7 +10,8 @@ import Foundation
 import CoreLocation
 
 protocol GPSSerivceProtocol {
-    func requestUserAuthorization()
+    func requestUserAuthorizationIfNeeded()
+    func startUpdatingLocation()
 }
 
 class GPSSerivce: NSObject, GPSSerivceProtocol {
@@ -28,7 +29,12 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     
     // MARK: - Public Properties
     
-    func requestUserAuthorization() {
+    func startUpdatingLocation() {
+        locationManager.startUpdatingLocation()
+        locationManager.startUpdatingHeading()
+    }
+    
+    func requestUserAuthorizationIfNeeded() {
         locationManager.requestWhenInUseAuthorization()
     }
     
@@ -36,8 +42,6 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = desiredAccuracy
-        locationManager.startUpdatingLocation()
-        locationManager.startUpdatingHeading()
     }
 }
 
