@@ -16,6 +16,9 @@
 		094DDE0823E9C50700EA1951 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */; };
 		094DDE1323E9C50700EA1951 /* Bike_ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094DDE1223E9C50700EA1951 /* Bike_ComputerTests.swift */; };
 		098E964024771AAA00046FCF /* GPSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098E963F24771AAA00046FCF /* GPSService.swift */; };
+		099D812C247EFBEA008033C6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 099D812E247EFBEA008033C6 /* Localizable.strings */; };
+		099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */; };
+		099D8135247F0071008033C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 099D8134247F0071008033C6 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,9 @@
 		094DDE1223E9C50700EA1951 /* Bike_ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bike_ComputerTests.swift; sourceTree = "<group>"; };
 		094DDE1423E9C50700EA1951 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		098E963F24771AAA00046FCF /* GPSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSService.swift; sourceTree = "<group>"; };
+		099D812D247EFBEA008033C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLocalizationExtension.swift; sourceTree = "<group>"; };
+		099D8134247F0071008033C6 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +72,6 @@
 			isa = PBXGroup;
 			children = (
 				094DDDFA23E9C50500EA1951 /* Bike Computer */,
-				094DDE1123E9C50700EA1951 /* Bike ComputerTests */,
 				094DDDF923E9C50500EA1951 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -83,15 +88,15 @@
 		094DDDFA23E9C50500EA1951 /* Bike Computer */ = {
 			isa = PBXGroup;
 			children = (
-				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
-				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
+				094DDE0923E9C50700EA1951 /* Info.plist */,
+				099D812B247EFB7B008033C6 /* Project Settings */,
+				099D812F247EFCE4008033C6 /* Global Extensions */,
+				099D8132247EFF61008033C6 /* Application Scope */,
 				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
 				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
-				094DDE0123E9C50700EA1951 /* Assets.xcassets */,
-				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
-				094DDE0923E9C50700EA1951 /* Info.plist */,
-				094DDE0323E9C50700EA1951 /* Preview Content */,
 				098E963F24771AAA00046FCF /* GPSService.swift */,
+				094DDE0323E9C50700EA1951 /* Preview Content */,
+				094DDE1123E9C50700EA1951 /* Bike ComputerTests */,
 			);
 			path = "Bike Computer";
 			sourceTree = "<group>";
@@ -111,6 +116,34 @@
 				094DDE1423E9C50700EA1951 /* Info.plist */,
 			);
 			path = "Bike ComputerTests";
+			sourceTree = "<group>";
+		};
+		099D812B247EFB7B008033C6 /* Project Settings */ = {
+			isa = PBXGroup;
+			children = (
+				094DDE0123E9C50700EA1951 /* Assets.xcassets */,
+				099D812E247EFBEA008033C6 /* Localizable.strings */,
+				099D8134247F0071008033C6 /* InfoPlist.strings */,
+			);
+			path = "Project Settings";
+			sourceTree = "<group>";
+		};
+		099D812F247EFCE4008033C6 /* Global Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */,
+			);
+			path = "Global Extensions";
+			sourceTree = "<group>";
+		};
+		099D8132247EFF61008033C6 /* Application Scope */ = {
+			isa = PBXGroup;
+			children = (
+				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
+				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
+				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
+			);
+			path = "Application Scope";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +210,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 094DDDEF23E9C50500EA1951;
 			productRefGroup = 094DDDF923E9C50500EA1951 /* Products */;
@@ -196,7 +230,9 @@
 			files = (
 				094DDE0823E9C50700EA1951 /* LaunchScreen.storyboard in Resources */,
 				094DDE0523E9C50700EA1951 /* Preview Assets.xcassets in Resources */,
+				099D812C247EFBEA008033C6 /* Localizable.strings in Resources */,
 				094DDE0223E9C50700EA1951 /* Assets.xcassets in Resources */,
+				099D8135247F0071008033C6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +255,7 @@
 				094DDDFC23E9C50500EA1951 /* AppDelegate.swift in Sources */,
 				094DDDFE23E9C50500EA1951 /* SceneDelegate.swift in Sources */,
 				094DDE0023E9C50500EA1951 /* BikeComputerView.swift in Sources */,
+				099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +286,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		099D812E247EFBEA008033C6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				099D812D247EFBEA008033C6 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -256,6 +301,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -316,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
