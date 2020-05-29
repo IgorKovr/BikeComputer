@@ -6,8 +6,12 @@ struct BikeComputerView: View {
   
   var body: some View {
     VStack {
-        Text(viewModel.speed)
-        Text(viewModel.time)
+      Text(viewModel.speed)
+        .font(.system(size: 100.0))
+        .frame(maxWidth: .infinity)
+      Text(viewModel.time)
+        .font(.system(size: 60.0))
+        .frame(maxWidth: .infinity)
     }.animation(.easeInOut)
   }
 }

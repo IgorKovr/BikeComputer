@@ -14,12 +14,14 @@ class BikeComputerViewModel: ObservableObject {
     self.gpsService = gpsService
     
     setupSpeedTimer()
-    askForLocationAccessIfNeeded()
+    gpsService.requestUserAuthorizationIfNeeded()
+    gpsService.startUpdatingLocation()
+    startObservingGpsService()
   }
   
   private func startObservingGpsService() {
     gpsService.speed
-      .map{ String($0) }
+      .map{ String(format: "%.2f", $0) }
       .assign(to: \.speed, on: self)
       .store(in: &subscriptions)
   }
@@ -27,12 +29,8 @@ class BikeComputerViewModel: ObservableObject {
   private func setupSpeedTimer() {
     let publisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
     let subscription = publisher
-      .map { date in return "\(date)" }
+      .map { date in return "\(date.toString(dateFormat: "hh:mm:ss"))" }
       .assign(to: \.time, on: self)
     subscriptions.append(subscription)
-  }
-  
-  private func askForLocationAccessIfNeeded() {
-    gpsService.requestUserAuthorizationIfNeeded()
   }
 }

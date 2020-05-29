@@ -40,13 +40,19 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
   // MARK: - Initializer
   init (locationManager: CLLocationManager = CLLocationManager()) {
     self.locationManager = locationManager
+    
+    super.init()
+    
+    self.setupLocationManager()
   }
   
   // MARK: - Public Properties
   
+  // FIXME: Need to restart after User Grants Permission
   func startUpdatingLocation() {
     locationManager.startUpdatingLocation()
     locationManager.startUpdatingHeading()
+    locationManager.requestLocation()
   }
   
   func requestUserAuthorizationIfNeeded() {
@@ -68,5 +74,9 @@ extension GPSSerivce: CLLocationManagerDelegate {
     guard let lastSpeed = locations.last?.speed else { return }
     
     self.speedInternal = lastSpeed
+  }
+  
+  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    print(error.localizedDescription)
   }
 }
