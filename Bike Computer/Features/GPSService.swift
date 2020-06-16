@@ -71,7 +71,9 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
 extension GPSSerivce: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let lastSpeed = locations.last?.speed else { return }
+        guard let lastSpeed = locations.last?.speed,
+            lastSpeed >= 0 // TODO: Negative Speed means invalid data. Add invalid data handling.
+            else { return }
         
         self._speed = lastSpeed
     }
