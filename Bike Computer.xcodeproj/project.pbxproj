@@ -50,11 +50,11 @@
 		099D812D247EFBEA008033C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLocalizationExtension.swift; sourceTree = "<group>"; };
 		099D8134247F0071008033C6 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
-		099D8136247F0B3A008033C6 /* Berlin - KJD.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Berlin - KJD.gpx"; path = "../../../../Downloads/ios_passenger_app/mytaxi/SupportingFiles/Berlin - KJD.gpx"; sourceTree = "<group>"; };
-		099D8137247F0B54008033C6 /* Bike_Ride_Berlin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Bike_Ride_Berlin.gpx; path = ../../../../Desktop/Bike_Ride_Berlin.gpx; sourceTree = "<group>"; };
-		099D8138247F0C66008033C6 /* bikecourse.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = bikecourse.gpx; path = ../../../../Desktop/bikecourse.gpx; sourceTree = "<group>"; };
 		099D8139247F0F7B008033C6 /* DateFormatExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatExtension.swift; sourceTree = "<group>"; };
 		09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationSpeed+Units.swift"; sourceTree = "<group>"; };
+		09B97A7E249929800051AD99 /* bikecourse.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = bikecourse.gpx; sourceTree = "<group>"; };
+		09B97A7F249929800051AD99 /* Berlin - KJD.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Berlin - KJD.gpx"; sourceTree = "<group>"; };
+		09B97A80249929800051AD99 /* Bike_Ride_Berlin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bike_Ride_Berlin.gpx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,9 +78,7 @@
 		094DDDEF23E9C50500EA1951 = {
 			isa = PBXGroup;
 			children = (
-				099D8138247F0C66008033C6 /* bikecourse.gpx */,
-				099D8137247F0B54008033C6 /* Bike_Ride_Berlin.gpx */,
-				099D8136247F0B3A008033C6 /* Berlin - KJD.gpx */,
+				09B97A7C249929650051AD99 /* Supporting Files */,
 				094DDDFA23E9C50500EA1951 /* Bike Computer */,
 				094DDDF923E9C50500EA1951 /* Products */,
 			);
@@ -99,12 +97,12 @@
 			isa = PBXGroup;
 			children = (
 				094DDE0923E9C50700EA1951 /* Info.plist */,
-				099D812B247EFB7B008033C6 /* Project Settings */,
-				099D812F247EFCE4008033C6 /* Global Extensions */,
-				099D8132247EFF61008033C6 /* Application Scope */,
-				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
-				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
-				098E963F24771AAA00046FCF /* GPSService.swift */,
+				099D812B247EFB7B008033C6 /* Recources */,
+				099D812F247EFCE4008033C6 /* Extensions */,
+				09B97A81249929BE0051AD99 /* Features */,
+				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
+				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
+				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
 				094DDE0323E9C50700EA1951 /* Preview Content */,
 				094DDE1123E9C50700EA1951 /* Bike ComputerTests */,
 			);
@@ -128,34 +126,52 @@
 			path = "Bike ComputerTests";
 			sourceTree = "<group>";
 		};
-		099D812B247EFB7B008033C6 /* Project Settings */ = {
+		099D812B247EFB7B008033C6 /* Recources */ = {
 			isa = PBXGroup;
 			children = (
 				094DDE0123E9C50700EA1951 /* Assets.xcassets */,
 				099D812E247EFBEA008033C6 /* Localizable.strings */,
 				099D8134247F0071008033C6 /* InfoPlist.strings */,
 			);
-			path = "Project Settings";
+			path = Recources;
 			sourceTree = "<group>";
 		};
-		099D812F247EFCE4008033C6 /* Global Extensions */ = {
+		099D812F247EFCE4008033C6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */,
 				099D8139247F0F7B008033C6 /* DateFormatExtension.swift */,
 				09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */,
 			);
-			path = "Global Extensions";
+			path = Extensions;
 			sourceTree = "<group>";
 		};
-		099D8132247EFF61008033C6 /* Application Scope */ = {
+		09B97A7C249929650051AD99 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
-				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
-				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
+				09B97A7D2499296E0051AD99 /* GPX Files */,
 			);
-			path = "Application Scope";
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		09B97A7D2499296E0051AD99 /* GPX Files */ = {
+			isa = PBXGroup;
+			children = (
+				09B97A7E249929800051AD99 /* bikecourse.gpx */,
+				09B97A80249929800051AD99 /* Bike_Ride_Berlin.gpx */,
+				09B97A7F249929800051AD99 /* Berlin - KJD.gpx */,
+			);
+			path = "GPX Files";
+			sourceTree = "<group>";
+		};
+		09B97A81249929BE0051AD99 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
+				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
+				098E963F24771AAA00046FCF /* GPSService.swift */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
