@@ -21,7 +21,7 @@ class BikeComputerViewModel: ObservableObject {
   
   private func startObservingGpsService() {
     gpsService.speed
-      .map{ String(format: "%.2f", $0) }
+      .map { String(format: "%.1f", $0.kmph) }
       .assign(to: \.speed, on: self)
       .store(in: &subscriptions)
   }
