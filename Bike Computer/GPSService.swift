@@ -21,11 +21,11 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
   // MARK: - Public Propeties
   
   // Manually expose speed publisher
-  var speed: Published<Double>.Publisher { $speedInternal }
+  var speed: Published<Double>.Publisher { $_speed }
   
   // MARK: - Private properties
   
-  @Published private var speedInternal: Double = 0.0
+  @Published private var _speed: Double = 0.0
   
   private let locationManager: CLLocationManager
   
@@ -73,7 +73,7 @@ extension GPSSerivce: CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let lastSpeed = locations.last?.speed else { return }
     
-    self.speedInternal = lastSpeed
+    self._speed = lastSpeed
   }
   
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
