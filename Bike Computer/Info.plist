@@ -57,6 +57,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string></string>
+    <string>Our app uses location data to to measure speed.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Our app uses bluetooth to connect devices such as HR and Speed sensors.</string>
 </dict>
 </plist>
