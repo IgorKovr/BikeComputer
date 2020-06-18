@@ -12,7 +12,6 @@ class BikeComputerViewModel: ObservableObject {
     // MARK: - Private Properties
     
     private var subscriptions = [AnyCancellable]()
-    
     private let gpsService: GPSSerivceProtocol
     private let bluetoothSensor: BluetoothServiceProtocol
     

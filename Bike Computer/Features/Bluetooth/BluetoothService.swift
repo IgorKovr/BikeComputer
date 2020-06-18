@@ -24,16 +24,25 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     
     private var centralManager: CBCentralManager!
     private var heartRatePeripheral: CBPeripheral!
+    private var speedAndCadencePeripheral: CBPeripheral!
+    
     private let heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling
+    private let bikePowerHandler: BluetoothSpeedAndCadenceHandler
     
     // MARK: Constants
     
-    private let supportedPeripheralServices = [BluetoothHeartRatePeripheralHandler.heartRateServiceCBUUID]
+    private let supportedPeripheralServices = [
+        // TODO Activate back the heartRate
+        //        BluetoothHeartRatePeripheralHandler.heartRateServiceCBUUID,
+        BluetoothSpeedAndCadenceHandler.speedAndCadenceServiceCBUUID
+    ]
     
     // MARK: - Initializers
     
-    init(heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling = BluetoothHeartRatePeripheralHandler()) {
+    init(heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling = BluetoothHeartRatePeripheralHandler(),
+         bikePowerHandler: BluetoothSpeedAndCadenceHandler = BluetoothSpeedAndCadenceHandler()) {
         self.heartRatePeripheralHandler = heartRatePeripheralHandler
+        self.bikePowerHandler = bikePowerHandler
     }
     
     // MARK: - Public Functions
@@ -80,17 +89,24 @@ extension BluetoothService: CBCentralManagerDelegate {
                       advertisementData: [String : Any], rssi RSSI: NSNumber) {
     print("Discovered peripheral: \(peripheral)")
         
-    // FIXME: Distinguish peripherals
-    heartRatePeripheral = peripheral
-    heartRatePeripheral.delegate = heartRatePeripheralHandler
-    // FIXME: Should we keep scanning?
+    // TODO: Distinguish peripherals
+        
+//    heartRatePeripheral = peripheral
+//    heartRatePeripheral.delegate = heartRatePeripheralHandler
+        
+    speedAndCadencePeripheral = peripheral
+    speedAndCadencePeripheral.delegate = bikePowerHandler
+    
+        // TODO: We should scan more until we all supported peripheral
     centralManager.stopScan()
         
-    centralManager.connect(heartRatePeripheral)
+    centralManager.connect(peripheral)
   }
 
   func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
     print("Connected peripheral: \(peripheral)")
-    heartRatePeripheral.discoverServices([BluetoothHeartRatePeripheralHandler.heartRateServiceCBUUID])
+    
+    // TODO: Distinguish the Services
+    peripheral.discoverServices(supportedPeripheralServices)
   }
 }

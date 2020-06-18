@@ -24,7 +24,6 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     var speed: Published<Double>.Publisher { $_speed }
     
     // MARK: - Private properties
-    
     @Published private var _speed: Double = 0.0
     
     private let locationManager: CLLocationManager
@@ -32,7 +31,6 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     // MARK: - Constants
     private let desiredAccuracy = kCLLocationAccuracyBest
     private let distanceFilter = kCLDistanceFilterNone
-    
     
     let minHorizontalAccuracyInMeters = 20.0
     let maxLocationAgeInSeconds = 10.0

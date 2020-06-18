@@ -23,6 +23,7 @@
 		09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */; };
 		09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8224992A840051AD99 /* BluetoothService.swift */; };
 		09B97A86249A55900051AD99 /* BluetoothHeartRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */; };
+		09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		09B97A80249929800051AD99 /* Bike_Ride_Berlin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bike_Ride_Berlin.gpx; sourceTree = "<group>"; };
 		09B97A8224992A840051AD99 /* BluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
 		09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothHeartRateHandler.swift; sourceTree = "<group>"; };
+		09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSpeedAndCadenceHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +186,7 @@
 			children = (
 				09B97A8224992A840051AD99 /* BluetoothService.swift */,
 				09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */,
+				09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				094DDE0023E9C50500EA1951 /* BikeComputerView.swift in Sources */,
 				09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */,
 				099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */,
+				09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
