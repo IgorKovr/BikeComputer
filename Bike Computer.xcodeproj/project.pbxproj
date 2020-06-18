@@ -21,6 +21,7 @@
 		099D8135247F0071008033C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 099D8134247F0071008033C6 /* InfoPlist.strings */; };
 		099D813A247F0F7B008033C6 /* DateFormatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099D8139247F0F7B008033C6 /* DateFormatExtension.swift */; };
 		09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */; };
+		09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8224992A840051AD99 /* BluetoothService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		09B97A7E249929800051AD99 /* bikecourse.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = bikecourse.gpx; sourceTree = "<group>"; };
 		09B97A7F249929800051AD99 /* Berlin - KJD.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Berlin - KJD.gpx"; sourceTree = "<group>"; };
 		09B97A80249929800051AD99 /* Bike_Ride_Berlin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bike_Ride_Berlin.gpx; sourceTree = "<group>"; };
+		09B97A8224992A840051AD99 /* BluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
 				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
 				098E963F24771AAA00046FCF /* GPSService.swift */,
+				09B97A8224992A840051AD99 /* BluetoothService.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				094DDDFE23E9C50500EA1951 /* SceneDelegate.swift in Sources */,
 				09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */,
 				094DDE0023E9C50500EA1951 /* BikeComputerView.swift in Sources */,
+				09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */,
 				099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

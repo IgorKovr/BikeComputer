@@ -7,10 +7,18 @@ struct BikeComputerView: View {
     var body: some View {
         VStack {
             Text(viewModel.speed)
-                .font(.system(size: 100.0))
+                .font(.system(size: 80.0, design: .monospaced))
                 .frame(maxWidth: .infinity)
+            Spacer()
+                .frame(height: 30)
             Text(viewModel.time)
-                .font(.system(size: 60.0))
+                .font(.system(size: 60.0, design: .monospaced))
+                .frame(maxWidth: .infinity)
+            Spacer()
+                .frame(height: 30)
+            Text(viewModel.heartRate)
+                // TODO: Make monospace
+                .font(.system(size: 80.0, design: .monospaced))
                 .frame(maxWidth: .infinity)
         }.animation(.easeInOut)
     }
