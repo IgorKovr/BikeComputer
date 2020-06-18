@@ -18,11 +18,12 @@ import CoreBluetooth
 //  Last cranck event time: 2 bytes. uint16 (1/1024s)
 
 
-struct BluetoothSpeedAndSensorDataPoint : CustomDebugStringConvertible {
+struct BluetoothSpeedAndCadenceDataPoint : CustomDebugStringConvertible {
     
     private let wheelFlagMask:UInt8    = 0b01
     private let crankFlagMask:UInt8    = 0b10
-    private let defaultWheelSize:UInt32   = 700*30 // 2170  // In millimiters. 700x30 (by default my bike's wheels) :)
+    static let defaultWheelSize:UInt32   = 700*30 // 2170  // In millimiters. 700x30 (by default my bike's wheels) :)
+    private let timeScale              = 1024.0
   
   let hasWheel:Bool
   let hasCrank:Bool
@@ -33,7 +34,7 @@ struct BluetoothSpeedAndSensorDataPoint : CustomDebugStringConvertible {
   let wheelSize:UInt32
   
   
-  init(data:NSData, wheelSize:UInt32) {
+    init(_ data: NSData, wheelSize: UInt32 = Self.defaultWheelSize) {
     
     self.wheelSize = wheelSize
     // Flags
@@ -53,60 +54,96 @@ struct BluetoothSpeedAndSensorDataPoint : CustomDebugStringConvertible {
     
     if ( hasWheel ) {
       
-      length = sizeof(UInt32)
+        length = MemoryLayout<UInt32>.size
       data.getBytes(&wheel, range: NSRange(location: currentOffset, length: length))
       currentOffset += length
       
-      length = sizeof(UInt16)
+        length = MemoryLayout<UInt16>.size
       data.getBytes(&wheelTime, range: NSRange(location: currentOffset, length: length))
       currentOffset += length
     }
     
     if ( hasCrank ) {
       
-      length = sizeof(UInt16)
+      length = MemoryLayout<UInt16>.size
       data.getBytes(&crank, range: NSRange(location: currentOffset, length: length))
       currentOffset += length
       
-      length = sizeof(UInt16)
+      length = MemoryLayout<UInt16>.size
       data.getBytes(&crankTime, range: NSRange(location: currentOffset, length: length))
       currentOffset += length
     }
     
     cumulativeWheel     = CFSwapInt32LittleToHost(wheel)
-    lastWheelEventTime  = NSTimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/BTConstants.TimeScale)
+    lastWheelEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/timeScale)
     cumulativeCrank     = CFSwapInt16LittleToHost(crank)
-    lastCrankEventTime  = NSTimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/BTConstants.TimeScale)
-    
+    lastCrankEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/timeScale)
   }
   
-  func timeIntervalForCurrentSample( current:NSTimeInterval, previous:NSTimeInterval ) -> NSTimeInterval {
-    var timeDiff:NSTimeInterval = 0
+  func timeIntervalForCurrentSample(_ current: TimeInterval, previous: TimeInterval ) -> TimeInterval {
+    var timeDiff: TimeInterval = 0
     if( current >= previous ) {
         timeDiff = current - previous
     }
     else {
       // passed the maximum value
-      timeDiff =  ( NSTimeInterval((Double( UINT16_MAX) / BTConstants.TimeScale)) - previous) + current
+      timeDiff =  (TimeInterval((Double( UINT16_MAX) / timeScale)) - previous) + current
     }
     return timeDiff
     
   }
   
-  func valueDiffForCurrentSample<T:UnsignedIntegerType>( current:T, previous:T , max:T) -> T {
+//  func valueDiffForCurrentSample<T:UnsignedIntegerType>( current:T, previous:T , max:T) -> T {
+//
+//    var diff:T = 0
+//    if  ( current >= previous ) {
+//      diff = current - previous
+//    }
+//    else {
+//       diff = ( max - previous ) + current
+//    }
+//    return diff
+//  }
     
-    var diff:T = 0
-    if  ( current >= previous ) {
-      diff = current - previous
+    
+    func valueDiffForCurrentSample(_ current: Double, previous: Double, max: Double) -> Double {
+      
+      var diff: Double = 0
+      if  ( current >= previous ) {
+        diff = current - previous
+      }
+      else {
+         diff = ( max - previous ) + current
+      }
+      return diff
     }
-    else {
-       diff = ( max - previous ) + current
+    
+    func valueDiffForCurrentSample(_ current: UInt32, previous: UInt32, max: UInt32) -> UInt32 {
+      
+      var diff: UInt32 = 0
+      if  ( current >= previous ) {
+        diff = current - previous
+      }
+      else {
+         diff = ( max - previous ) + current
+      }
+      return diff
     }
-    return diff
-  }
+    
+    func valueDiffForCurrentSample(_ current: UInt16, previous: UInt16, max: UInt16) -> UInt16 {
+      
+      var diff: UInt16 = 0
+      if  ( current >= previous ) {
+        diff = current - previous
+      }
+      else {
+         diff = ( max - previous ) + current
+      }
+      return diff
+    }
   
   
-  func valuesForPreviousMeasurement( previousSample:Measurement? ) -> ( cadenceinRPM:Double?, distanceinMeters:Double?, speedInMetersPerSecond:Double?)? {
+  func valuesForPreviousMeasurement( previousSample: BluetoothSpeedAndCadenceDataPoint? ) -> ( cadenceinRPM:Double?, distanceinMeters:Double?, speedInMetersPerSecond:Double?)? {
     
     
     var distance:Double?, cadence:Double?, speed:Double?
