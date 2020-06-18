@@ -22,6 +22,7 @@
 		099D813A247F0F7B008033C6 /* DateFormatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099D8139247F0F7B008033C6 /* DateFormatExtension.swift */; };
 		09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */; };
 		09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8224992A840051AD99 /* BluetoothService.swift */; };
+		09B97A86249A55900051AD99 /* BluetoothHeartRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		09B97A7F249929800051AD99 /* Berlin - KJD.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Berlin - KJD.gpx"; sourceTree = "<group>"; };
 		09B97A80249929800051AD99 /* Bike_Ride_Berlin.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bike_Ride_Berlin.gpx; sourceTree = "<group>"; };
 		09B97A8224992A840051AD99 /* BluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
+		09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothHeartRateHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,12 +171,21 @@
 		09B97A81249929BE0051AD99 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				09B97A84249A55100051AD99 /* Bluetooth */,
 				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
 				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
 				098E963F24771AAA00046FCF /* GPSService.swift */,
-				09B97A8224992A840051AD99 /* BluetoothService.swift */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		09B97A84249A55100051AD99 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				09B97A8224992A840051AD99 /* BluetoothService.swift */,
+				09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */,
+			);
+			path = Bluetooth;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +296,7 @@
 				09135DA023F1610F00601377 /* BikeComputerViewModel.swift in Sources */,
 				098E964024771AAA00046FCF /* GPSService.swift in Sources */,
 				094DDDFC23E9C50500EA1951 /* AppDelegate.swift in Sources */,
+				09B97A86249A55900051AD99 /* BluetoothHeartRateHandler.swift in Sources */,
 				094DDDFE23E9C50500EA1951 /* SceneDelegate.swift in Sources */,
 				09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */,
 				094DDE0023E9C50500EA1951 /* BikeComputerView.swift in Sources */,

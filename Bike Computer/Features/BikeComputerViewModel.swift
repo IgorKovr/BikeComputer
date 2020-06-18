@@ -3,14 +3,20 @@ import Combine
 
 class BikeComputerViewModel: ObservableObject {
     
+    // MARK: - Public Properties
+    
     @Published var speed: String = ""
     @Published var heartRate: String = ""
     @Published var time: String = ""
     
+    // MARK: - Private Properties
+    
     private var subscriptions = [AnyCancellable]()
     
     private let gpsService: GPSSerivceProtocol
-    private let bluetoothSensor: BluetoothService
+    private let bluetoothSensor: BluetoothServiceProtocol
+    
+    // MARK: - Initializer
     
     init(gpsService: GPSSerivceProtocol = GPSSerivce(),
          bluetoothSensor: BluetoothService = BluetoothService()) {
@@ -22,9 +28,11 @@ class BikeComputerViewModel: ObservableObject {
         gpsService.startUpdatingLocation()
         startObservingGpsService()
         
-        bluetoothSensor.start()
+        bluetoothSensor.startBluetoothScan()
         startObservingBluetoothSensor()
     }
+    
+    // MARK: - Private Functions
     
     private func startObservingBluetoothSensor() {
         bluetoothSensor.heartRate
