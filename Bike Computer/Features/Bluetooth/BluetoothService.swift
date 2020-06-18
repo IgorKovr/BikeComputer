@@ -11,6 +11,10 @@ import CoreBluetooth
 protocol BluetoothServiceProtocol {
     
     var heartRate: Published<Int>.Publisher { get }
+    var cadence: Published<Double>.Publisher { get }
+    var speed: Published<Double>.Publisher { get }
+    var distanceInMeters: Published<Double>.Publisher { get }
+    
     func startBluetoothScan()
 }
 
@@ -19,6 +23,9 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     // MARK: - Public Properties
     
     var heartRate: Published<Int>.Publisher { heartRatePeripheralHandler.heartRate }
+    var cadence: Published<Double>.Publisher { bikePowerHandler.cadence }
+    var speed: Published<Double>.Publisher { bikePowerHandler.speed }
+    var distanceInMeters: Published<Double>.Publisher { bikePowerHandler.distanceInMeters }
     
     // MARK: - Private Properties
     

@@ -8,6 +8,8 @@ class BikeComputerViewModel: ObservableObject {
     @Published var speed: String = ""
     @Published var heartRate: String = ""
     @Published var time: String = ""
+    @Published var speedBT: String = ""
+    @Published var cadence: String = ""
     
     // MARK: - Private Properties
     
@@ -37,6 +39,16 @@ class BikeComputerViewModel: ObservableObject {
         bluetoothSensor.heartRate
             .map { String(format: "\($0)") }
             .assign(to: \.heartRate, on: self)
+            .store(in: &subscriptions)
+        
+        bluetoothSensor.speed
+            .map { String(format: "\($0)") }
+            .assign(to: \.speedBT, on: self)
+            .store(in: &subscriptions)
+        
+        bluetoothSensor.cadence
+            .map { String(format: "\($0)") }
+            .assign(to: \.cadence, on: self)
             .store(in: &subscriptions)
     }
     
