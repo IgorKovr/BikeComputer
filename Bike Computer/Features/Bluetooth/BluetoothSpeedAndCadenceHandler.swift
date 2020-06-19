@@ -14,7 +14,6 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
     
     // MARK: - Class Constants
     static let speedAndCadenceServiceCBUUID = CBUUID(string: "1816")
-    static let defaultWheelСircumference: Double = 3.2*700 // Pi * diameter
     
     // MARK: - Private Properties
     private let cyclingSpeedAndCadenceMeasurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
@@ -22,12 +21,16 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
     private let sensorLocationCharacteristicsCBUUID = CBUUID(string: "2a5d")
     private let speedAndCadenceControlPointCBUUID = CBUUID(string: "2a55")
     
+    private let defaultWheelСircumferenceInMeters: Double = 3.2*700/1000 // Pi * diameter
+    
+    private var firstMeasurement: BluetoothSpeedAndCadenceDataPoint?
     private var lastMeasurement: BluetoothSpeedAndCadenceDataPoint?
     
     private func handleMeasurement(_ data: Data) {
         let measurement = BluetoothSpeedAndCadenceDataPoint(NSData(data: data),
-                                                            wheelСircumference: Self.defaultWheelСircumference)
-        print(measurement)
+                                                            wheelСircumference: defaultWheelСircumferenceInMeters)
+        
+        firstMeasurement = firstMeasurement ?? measurement
         
         let values = measurement.valuesForPreviousMeasurement(previousSample: lastMeasurement)
         lastMeasurement = measurement
@@ -40,9 +43,16 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
             _cadence = cadence
         }
         
-        if let distanceInMeters = values?.distanceinMeters {
-            _distanceInMeters = distanceInMeters
+        _distanceInMeters = calculateDistance()
+    }
+    
+    private func calculateDistance() -> Double {
+        guard let firstMeasurementCumulativeWheelRevolutions = firstMeasurement?.cumulativeWheelRevolutions,
+            let lastMeasurementCumulativeWheelRevolutions = lastMeasurement?.cumulativeWheelRevolutions else {
+                return 0.0
         }
+        
+        return Double(lastMeasurementCumulativeWheelRevolutions - firstMeasurementCumulativeWheelRevolutions) * defaultWheelСircumferenceInMeters
     }
 }
 

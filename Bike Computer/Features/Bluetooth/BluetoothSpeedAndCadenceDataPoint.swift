@@ -101,7 +101,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             
             let valueDiff = valueDiffForCurrentSample(cumulativeWheelRevolutions, previous: previousSample.cumulativeWheelRevolutions, max: UInt32.max)
             
-            distance = Double(valueDiff) * wheelСircumference / 1000.0 // distance in meters
+            distance = Double(valueDiff) * wheelСircumference // distance in meters
             if  distance != nil  &&  wheelTimeDiff > 0 {
                 speed = (wheelTimeDiff == 0 ) ? 0 : distance! / wheelTimeDiff // m/s
             }
