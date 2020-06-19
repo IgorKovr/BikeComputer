@@ -8,6 +8,12 @@
 
 import CoreBluetooth
 
+protocol ServiceHandling: CBPeripheralDelegate {
+    
+    var isConnected: Bool { get set }
+    var uuid: CBUUID { get }
+}
+
 protocol BluetoothServiceProtocol {
     
     var heartRate: Published<Int>.Publisher { get }
@@ -29,20 +35,14 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     
     // MARK: - Private Properties
     
-    private var centralManager: CBCentralManager!
-    private var heartRatePeripheral: CBPeripheral!
-    private var speedAndCadencePeripheral: CBPeripheral!
-    
     private let heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling
     private let bikePowerHandler: BluetoothSpeedAndCadenceHandler
     
-    // MARK: Constants
+    private var centralManager: CBCentralManager!
+    private var supportedPeripherals = [CBPeripheral]()
+    private var services: [ServiceHandling]
+    private var currentServiceForScan: ServiceHandling? = nil
     
-    private let supportedPeripheralServices = [
-        // TODO Activate back the heartRate
-        //        BluetoothHeartRatePeripheralHandler.heartRateServiceCBUUID,
-        BluetoothSpeedAndCadenceHandler.speedAndCadenceServiceCBUUID
-    ]
     
     // MARK: - Initializers
     
@@ -50,6 +50,9 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
          bikePowerHandler: BluetoothSpeedAndCadenceHandler = BluetoothSpeedAndCadenceHandler()) {
         self.heartRatePeripheralHandler = heartRatePeripheralHandler
         self.bikePowerHandler = bikePowerHandler
+        
+        services = [heartRatePeripheralHandler,
+                    bikePowerHandler]
     }
     
     // MARK: - Public Functions
@@ -76,6 +79,15 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
             print("central.state is unknown")
         }
     }
+    
+    func scanForNextService() {
+        if let unconnectedServices = services.first(where: { $0.isConnected == false}) {
+            currentServiceForScan = unconnectedServices
+            centralManager.scanForPeripherals(withServices: [unconnectedServices.uuid])
+        } else {
+            centralManager.stopScan()
+        }
+    }
 }
 
 // MARK: - CBCentralManagerDelegate
@@ -85,7 +97,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            centralManager.scanForPeripherals(withServices: supportedPeripheralServices)
+            scanForNextService()
         default: break
         }
         
@@ -95,25 +107,21 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
                         advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("Discovered peripheral: \(peripheral)")
+
+        supportedPeripherals.append(peripheral)
+        peripheral.delegate = currentServiceForScan
         
-        // TODO: Distinguish peripherals
-        
-        //    heartRatePeripheral = peripheral
-        //    heartRatePeripheral.delegate = heartRatePeripheralHandler
-        
-        speedAndCadencePeripheral = peripheral
-        speedAndCadencePeripheral.delegate = bikePowerHandler
-        
-        // TODO: We should scan more until we all supported peripheral
         centralManager.stopScan()
-        
         centralManager.connect(peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected peripheral: \(peripheral)")
         
-        // TODO: Distinguish the Services
-        peripheral.discoverServices(supportedPeripheralServices)
+        guard let currentServiceForScan = currentServiceForScan else { return }
+        
+        peripheral.discoverServices([currentServiceForScan.uuid])
+        currentServiceForScan.isConnected = true
+        scanForNextService()
     }
 }

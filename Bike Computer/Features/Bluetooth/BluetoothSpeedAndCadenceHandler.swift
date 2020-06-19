@@ -1,19 +1,18 @@
 import CoreBluetooth
 import Combine
 
-class BluetoothSpeedAndCadenceHandler: NSObject {
+class BluetoothSpeedAndCadenceHandler: NSObject, ServiceHandling {
     
+    // MARK: - Public Properties
+    
+    let uuid = CBUUID(string: "1816")
+    var isConnected: Bool = false
     var cadence: Published<Double>.Publisher { $_cadence }
     @Published private var _cadence: Double = 0
-    
     var speedInMetersPerSecond: Published<Double>.Publisher { $_speedInMetersPerSecond }
     @Published private var _speedInMetersPerSecond: Double = 0
-    
     var distanceInMeters: Published<Double>.Publisher { $_distanceInMeters }
     @Published private var _distanceInMeters: Double = 0
-    
-    // MARK: - Class Constants
-    static let speedAndCadenceServiceCBUUID = CBUUID(string: "1816")
     
     // MARK: - Private Properties
     private let cyclingSpeedAndCadenceMeasurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
