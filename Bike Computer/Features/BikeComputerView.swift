@@ -6,38 +6,56 @@ struct BikeComputerView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.speed)
-                .font(.system(size: 80.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-            Spacer()
-                .frame(height: 30)
-            Text(viewModel.curentSessionTime)
-                .font(.system(size: 60.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-            Spacer()
-                .frame(height: 30)
-            Text(viewModel.heartRate)
-                .font(.system(size: 80.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-            Spacer()
-                .frame(height: 30)
-            Text(viewModel.speedBT)
-                .font(.system(size: 80.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-//            Spacer()
-//                .frame(height: 30)
-//            Text(viewModel.cadence)
-//                .font(.system(size: 80.0, design: .monospaced))
-//                .frame(maxWidth: .infinity)
-            Spacer()
-                .frame(height: 30)
-            Text(viewModel.distance)
-                .font(.system(size: 80.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-            Text(viewModel.averageSpeed)
-                .font(.system(size: 80.0, design: .monospaced))
-                .frame(maxWidth: .infinity)
-        }.animation(.easeInOut)
+            Group {
+                Text("🏎")
+                    .font(.system(size: 40))
+                Text(viewModel.speedBT)
+                    .font(.system(size: 80, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+            Group {
+                Text("🛰")
+                    .font(.system(size: 40))
+                Text(viewModel.speed)
+                    .font(.system(size: 80, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+            Group {
+                Text("❤️")
+                    .font(.system(size: 25))
+                Text(viewModel.heartRate)
+                    .font(.system(size: 60, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+//            Group {
+//                Spacer()
+//                    .frame(height: 30)
+//                Text(viewModel.cadence)
+//                    .font(.system(size: 80.0, design: .monospaced))
+//                    .frame(maxWidth: .infinity)
+//            }
+            Group {
+                Text("🛣")
+                    .font(.system(size: 25))
+                Text(viewModel.distance)
+                    .font(.system(size: 60, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+            Group {
+                Text("🗺")
+                    .font(.system(size: 25))
+                Text(viewModel.averageSpeed)
+                    .font(.system(size: 60, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+            Group {
+                Text("⏱")
+                    .font(.system(size: 25))
+                Text(viewModel.curentSessionTime)
+                    .font(.system(size: 60, design: .monospaced))
+                    .frame(maxWidth: .infinity)
+            }
+        }
     }
 }
 
