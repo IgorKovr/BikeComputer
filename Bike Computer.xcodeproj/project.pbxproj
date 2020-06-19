@@ -25,6 +25,7 @@
 		09B97A86249A55900051AD99 /* BluetoothHeartRateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */; };
 		09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */; };
 		09B97A8B249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8A249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift */; };
+		09B97A8D249CF1370051AD99 /* TimeIntervalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8C249CF1370051AD99 /* TimeIntervalExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		09B97A85249A55900051AD99 /* BluetoothHeartRateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothHeartRateHandler.swift; sourceTree = "<group>"; };
 		09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSpeedAndCadenceHandler.swift; sourceTree = "<group>"; };
 		09B97A8A249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSpeedAndCadenceDataPoint.swift; sourceTree = "<group>"; };
+		09B97A8C249CF1370051AD99 /* TimeIntervalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 				099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */,
 				099D8139247F0F7B008033C6 /* DateFormatExtension.swift */,
 				09B97A7A249921850051AD99 /* CLLocationSpeed+Units.swift */,
+				09B97A8C249CF1370051AD99 /* TimeIntervalExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				09B97A7B249921850051AD99 /* CLLocationSpeed+Units.swift in Sources */,
 				094DDE0023E9C50500EA1951 /* BikeComputerView.swift in Sources */,
 				09B97A8324992A840051AD99 /* BluetoothService.swift in Sources */,
+				09B97A8D249CF1370051AD99 /* TimeIntervalExtension.swift in Sources */,
 				099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */,
 				09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */,
 			);

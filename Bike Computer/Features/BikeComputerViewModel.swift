@@ -7,9 +7,11 @@ class BikeComputerViewModel: ObservableObject {
     
     @Published var speed: String = ""
     @Published var heartRate: String = ""
-    @Published var time: String = ""
     @Published var speedBT: String = ""
     @Published var cadence: String = ""
+    @Published var averageSpeed: String = ""
+    @Published var distance: String = ""
+    @Published var curentSessionTime: String = ""
     
     // MARK: - Private Properties
     
@@ -17,14 +19,18 @@ class BikeComputerViewModel: ObservableObject {
     private let gpsService: GPSSerivceProtocol
     private let bluetoothSensor: BluetoothServiceProtocol
     
+    private let sessionStartTimestamp: Date
+    private var curentSessionTimeInterval: TimeInterval = 0
+    
     // MARK: - Initializer
     
     init(gpsService: GPSSerivceProtocol = GPSSerivce(),
          bluetoothSensor: BluetoothService = BluetoothService()) {
         self.gpsService = gpsService
         self.bluetoothSensor = bluetoothSensor
+        sessionStartTimestamp = Date()
         
-        setupSpeedTimer()
+        setupTimer()
         gpsService.requestUserAuthorizationIfNeeded()
         gpsService.startUpdatingLocation()
         startObservingGpsService()
@@ -50,6 +56,16 @@ class BikeComputerViewModel: ObservableObject {
             .map { String(format: "\($0)") }
             .assign(to: \.cadence, on: self)
             .store(in: &subscriptions)
+        
+        bluetoothSensor.distanceInMeters
+            .map { String(format: "%.f", $0.rounded()) }
+            .assign(to: \.distance, on: self)
+            .store(in: &subscriptions)
+        
+        bluetoothSensor.distanceInMeters
+            .map { String(format: "%.f", ($0 / self.curentSessionTimeInterval).kmph) }
+            .assign(to: \.averageSpeed, on: self)
+            .store(in: &subscriptions)
     }
     
     private func startObservingGpsService() {
@@ -59,11 +75,14 @@ class BikeComputerViewModel: ObservableObject {
             .store(in: &subscriptions)
     }
     
-    private func setupSpeedTimer() {
+    private func setupTimer() {
         let publisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
         let subscription = publisher
-            .map { date in return "\(date.toString(dateFormat: "hh:mm:ss"))" }
-            .assign(to: \.time, on: self)
+            .map { date in
+                self.curentSessionTimeInterval = date.timeIntervalSince(self.sessionStartTimestamp)
+                return "\(self.curentSessionTimeInterval.stringFormatted())"
+        }
+            .assign(to: \.curentSessionTime, on: self)
         subscriptions.append(subscription)
     }
 }
