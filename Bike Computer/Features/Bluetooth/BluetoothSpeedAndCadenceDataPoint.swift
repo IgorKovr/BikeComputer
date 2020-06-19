@@ -17,26 +17,23 @@ import CoreBluetooth
 //  Cumulative Crank revolutions: 2 bytes uint16
 //  Last crank event time: 2 bytes. uint16 (1/1024s)
 
-
 struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
     
-    private let wheelFlagMask:UInt8    = 0b01
-    private let crankFlagMask:UInt8    = 0b10
-    static let defaultWheelSize:UInt32   = 700*30 // 2170  // In millimiters. 700x30 (by default my bike's wheels) :)
-    private let timeScale              = 1024.0
+    private let wheelFlagMask: UInt8 = 0b01
+    private let crankFlagMask: UInt8 = 0b10
+    private let timeScale = 1024.0
     
     let hasWheel:Bool
     let hasCrank:Bool
-    let cumulativeWheel:UInt32
+    let cumulativeWheelRevolutions:UInt32
     let lastWheelEventTime:TimeInterval
-    let cumulativeCrank:UInt16
+    let cumulativeCrankRevolutions:UInt16
     let lastCrankEventTime:TimeInterval
-    let wheelSize:UInt32
+    let wheelСircumference: Double
     
-    
-    init(_ data: NSData, wheelSize: UInt32 = Self.defaultWheelSize) {
+    init(_ data: NSData, wheelСircumference: Double) {
         
-        self.wheelSize = wheelSize
+        self.wheelСircumference = wheelСircumference
         // Flags
         var flags:UInt8=0
         data.getBytes(&flags, range: NSRange(location: 0, length: 1))
@@ -74,9 +71,9 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             currentOffset += length
         }
         
-        cumulativeWheel     = CFSwapInt32LittleToHost(wheel)
+        cumulativeWheelRevolutions     = CFSwapInt32LittleToHost(wheel)
         lastWheelEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/timeScale)
-        cumulativeCrank     = CFSwapInt16LittleToHost(crank)
+        cumulativeCrankRevolutions     = CFSwapInt16LittleToHost(crank)
         lastCrankEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/timeScale)
     }
     
@@ -102,9 +99,9 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
         if ( hasWheel && previousSample.hasWheel ) {
             let wheelTimeDiff = timeIntervalForCurrentSample(lastWheelEventTime, previous: previousSample.lastWheelEventTime)
             
-            let valueDiff = valueDiffForCurrentSample(cumulativeWheel, previous: previousSample.cumulativeWheel, max: UInt32.max)
+            let valueDiff = valueDiffForCurrentSample(cumulativeWheelRevolutions, previous: previousSample.cumulativeWheelRevolutions, max: UInt32.max)
             
-            distance = Double( valueDiff * wheelSize) / 1000.0 // distance in meters
+            distance = Double(valueDiff) * wheelСircumference / 1000.0 // distance in meters
             if  distance != nil  &&  wheelTimeDiff > 0 {
                 speed = (wheelTimeDiff == 0 ) ? 0 : distance! / wheelTimeDiff // m/s
             }
@@ -112,7 +109,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
         
         if( hasCrank && previousSample.hasCrank ) {
             let crankDiffTime = timeIntervalForCurrentSample(lastCrankEventTime, previous: previousSample.lastCrankEventTime)
-            let valueDiff = Double(valueDiffForCurrentSample(cumulativeCrank, previous: previousSample.cumulativeCrank, max: UInt16.max))
+            let valueDiff = Double(valueDiffForCurrentSample(cumulativeCrankRevolutions, previous: previousSample.cumulativeCrankRevolutions, max: UInt16.max))
             
             cadence = (crankDiffTime == 0) ? 0 : Double(60.0 * valueDiff / crankDiffTime) // RPM
         }
@@ -122,7 +119,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
     
     var debugDescription:String {
         get {
-            return "Wheel Revs: \(cumulativeWheel). Last wheel event time: \(lastWheelEventTime). Crank Revs: \(cumulativeCrank). Last Crank event time: \(lastCrankEventTime)"
+            return "Wheel Revs: \(cumulativeWheelRevolutions). Last wheel event time: \(lastWheelEventTime). Crank Revs: \(cumulativeCrankRevolutions). Last Crank event time: \(lastCrankEventTime)"
         }
     }
 }

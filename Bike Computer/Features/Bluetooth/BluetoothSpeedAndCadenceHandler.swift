@@ -14,6 +14,7 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
     
     // MARK: - Class Constants
     static let speedAndCadenceServiceCBUUID = CBUUID(string: "1816")
+    static let defaultWheelСircumference: Double = 3.2*700 // Pi * diameter
     
     // MARK: - Private Properties
     private let cyclingSpeedAndCadenceMeasurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
@@ -24,7 +25,8 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
     private var lastMeasurement: BluetoothSpeedAndCadenceDataPoint?
     
     private func handleMeasurement(_ data: Data) {
-        let measurement = BluetoothSpeedAndCadenceDataPoint(NSData(data: data))
+        let measurement = BluetoothSpeedAndCadenceDataPoint(NSData(data: data),
+                                                            wheelСircumference: Self.defaultWheelСircumference)
         print(measurement)
         
         let values = measurement.valuesForPreviousMeasurement(previousSample: lastMeasurement)
