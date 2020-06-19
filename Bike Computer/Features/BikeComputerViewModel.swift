@@ -41,8 +41,8 @@ class BikeComputerViewModel: ObservableObject {
             .assign(to: \.heartRate, on: self)
             .store(in: &subscriptions)
         
-        bluetoothSensor.speed
-            .map { String(format: "\($0)") }
+        bluetoothSensor.speedInMetersPerSecond
+            .map { String(format: "%.1f", $0.kmph) }
             .assign(to: \.speedBT, on: self)
             .store(in: &subscriptions)
         

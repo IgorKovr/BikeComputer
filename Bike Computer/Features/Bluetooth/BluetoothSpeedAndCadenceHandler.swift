@@ -6,8 +6,8 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
     var cadence: Published<Double>.Publisher { $_cadence }
     @Published private var _cadence: Double = 0
     
-    var speed: Published<Double>.Publisher { $_speed }
-    @Published private var _speed: Double = 0
+    var speedInMetersPerSecond: Published<Double>.Publisher { $_speedInMetersPerSecond }
+    @Published private var _speedInMetersPerSecond: Double = 0
     
     var distanceInMeters: Published<Double>.Publisher { $_distanceInMeters }
     @Published private var _distanceInMeters: Double = 0
@@ -31,7 +31,7 @@ class BluetoothSpeedAndCadenceHandler: NSObject {
         lastMeasurement = measurement
         
         if let speed = values?.speedInMetersPerSecond {
-            _speed = speed
+            _speedInMetersPerSecond = speed
         }
         
         if let cadence = values?.cadenceinRPM {
