@@ -53,25 +53,25 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     }
     
     // MARK: - Public Functions
-
+    
     func startBluetoothScan() {
-      centralManager = CBCentralManager(delegate: self, queue: nil)
+        centralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
     private func logBluetoothManagerState(_ state: CBManagerState) {
         switch state {
         case .unknown:
-          print("central.state is .unknown")
+            print("central.state is .unknown")
         case .resetting:
-          print("central.state is .resetting")
+            print("central.state is .resetting")
         case .unsupported:
-          print("central.state is .unsupported")
+            print("central.state is .unsupported")
         case .unauthorized:
-          print("central.state is .unauthorized")
+            print("central.state is .unauthorized")
         case .poweredOff:
-          print("central.state is .poweredOff")
+            print("central.state is .poweredOff")
         case .poweredOn:
-          print("central.state is .poweredOn")
+            print("central.state is .poweredOn")
         @unknown default:
             print("central.state is unknown")
         }
@@ -93,27 +93,27 @@ extension BluetoothService: CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
-                      advertisementData: [String : Any], rssi RSSI: NSNumber) {
-    print("Discovered peripheral: \(peripheral)")
+                        advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("Discovered peripheral: \(peripheral)")
         
-    // TODO: Distinguish peripherals
+        // TODO: Distinguish peripherals
         
-//    heartRatePeripheral = peripheral
-//    heartRatePeripheral.delegate = heartRatePeripheralHandler
+        //    heartRatePeripheral = peripheral
+        //    heartRatePeripheral.delegate = heartRatePeripheralHandler
         
-    speedAndCadencePeripheral = peripheral
-    speedAndCadencePeripheral.delegate = bikePowerHandler
-    
+        speedAndCadencePeripheral = peripheral
+        speedAndCadencePeripheral.delegate = bikePowerHandler
+        
         // TODO: We should scan more until we all supported peripheral
-    centralManager.stopScan()
+        centralManager.stopScan()
         
-    centralManager.connect(peripheral)
-  }
-
-  func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-    print("Connected peripheral: \(peripheral)")
+        centralManager.connect(peripheral)
+    }
     
-    // TODO: Distinguish the Services
-    peripheral.discoverServices(supportedPeripheralServices)
-  }
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        print("Connected peripheral: \(peripheral)")
+        
+        // TODO: Distinguish the Services
+        peripheral.discoverServices(supportedPeripheralServices)
+    }
 }
