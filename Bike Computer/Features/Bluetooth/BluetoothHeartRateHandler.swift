@@ -17,7 +17,7 @@ class BluetoothHeartRatePeripheralHandler: NSObject, BluetoothHeartRatePeriphera
 
     // MARK: - Public Properteis
 
-    let uuid =  CBUUID(string: "0x180D")
+    let uuid = CBUUID(string: "0x180D")
     var isConnected: Bool = false
     var heartRate: Published<Int>.Publisher { $_heartRate }
     @Published private var _heartRate: Int = 0

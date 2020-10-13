@@ -6,6 +6,8 @@ excluded:
 force_cast: warning
 force_try: warning
 
+identifier_name: 
+  max_length: 60
 line_length: 180
 file_length:
   warning: 500
