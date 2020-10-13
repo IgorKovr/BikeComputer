@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct BikeComputerView: View {
-    
+
     @ObservedObject var viewModel = BikeComputerViewModel()
-    
+
     var body: some View {
         VStack {
             Group {

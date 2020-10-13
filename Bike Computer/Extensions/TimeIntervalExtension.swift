@@ -9,7 +9,7 @@
 import Foundation
 
 extension TimeInterval {
-    
+
     func stringFormatted() -> String {
         let interval = Int(self)
         let seconds = interval % 60

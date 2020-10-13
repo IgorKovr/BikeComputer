@@ -9,9 +9,9 @@
 import CoreLocation
 
 // Сoefficient to convert Meters per Second into Kilometers per hour
-fileprivate let mpsToKmph = 3.6
+private let mpsToKmph = 3.6
 
 extension CLLocationSpeed {
-    
+
     var kmph: CLLocationSpeed { return self * mpsToKmph }
 }
