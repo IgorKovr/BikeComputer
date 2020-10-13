@@ -1,0 +1,12 @@
+# paths to ignore during linting.
+excluded:
+  - Mint
+
+# lint rules
+force_cast: warning
+force_try: warning
+
+line_length: 180
+file_length:
+  warning: 500
+  error: 1200
