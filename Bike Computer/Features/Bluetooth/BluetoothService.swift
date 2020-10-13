@@ -37,7 +37,6 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
 
     private let heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling
     private let bikePowerHandler: BluetoothSpeedAndCadenceHandler
-
     private var centralManager: CBCentralManager!
     private var supportedPeripherals = [CBPeripheral]()
     private var services: [ServiceHandling]

@@ -19,17 +19,22 @@ import CoreBluetooth
 
 struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
 
+    // MARK: - Public properties
+    let cumulativeWheelRevolutions: UInt32
+
+    // MARK: - Private properties
+
+    private let isSpeedSensorAvailable: Bool
+    private let isCadenceSensorAvailable: Bool
+    private let lastWheelEventTime: TimeInterval
+    private let cumulativeCrankRevolutions: UInt16
+    private let lastCrankEventTime: TimeInterval
+    private let wheelСircumference: Double
+
+    // MARK: - Constants
     private let wheelFlagMask: UInt8 = 0b01
     private let crankFlagMask: UInt8 = 0b10
     private let timeScale = 1024.0
-
-    let hasWheel: Bool
-    let hasCrank: Bool
-    let cumulativeWheelRevolutions: UInt32
-    let lastWheelEventTime: TimeInterval
-    let cumulativeCrankRevolutions: UInt16
-    let lastCrankEventTime: TimeInterval
-    let wheelСircumference: Double
 
     init(_ data: NSData, wheelСircumference: Double) {
 
@@ -38,19 +43,17 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
         var flags: UInt8=0
         data.getBytes(&flags, range: NSRange(location: 0, length: 1))
 
-        hasWheel = ((flags & wheelFlagMask) > 0)
-        hasCrank = ((flags & crankFlagMask) > 0)
+        isSpeedSensorAvailable = ((flags & wheelFlagMask) > 0)
+        isCadenceSensorAvailable = ((flags & crankFlagMask) > 0)
 
-        var wheel: UInt32=0
-        var wheelTime: UInt16=0
-        var crank: UInt16=0
-        var crankTime: UInt16=0
-
+        var wheel: UInt32 = 0
+        var wheelTime: UInt16 = 0
+        var crank: UInt16 = 0
+        var crankTime: UInt16 = 0
         var currentOffset = 1
         var length = 0
 
-        if  hasWheel {
-
+        if  isSpeedSensorAvailable {
             length = MemoryLayout<UInt32>.size
             data.getBytes(&wheel, range: NSRange(location: currentOffset, length: length))
             currentOffset += length
@@ -60,8 +63,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             currentOffset += length
         }
 
-        if  hasCrank {
-
+        if  isCadenceSensorAvailable {
             length = MemoryLayout<UInt16>.size
             data.getBytes(&crank, range: NSRange(location: currentOffset, length: length))
             currentOffset += length
@@ -71,30 +73,30 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             currentOffset += length
         }
 
-        cumulativeWheelRevolutions     = CFSwapInt32LittleToHost(wheel)
-        lastWheelEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/timeScale)
-        cumulativeCrankRevolutions     = CFSwapInt16LittleToHost(crank)
-        lastCrankEventTime  = TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/timeScale)
+        cumulativeWheelRevolutions = CFSwapInt32LittleToHost(wheel)
+        lastWheelEventTime = TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/timeScale)
+        cumulativeCrankRevolutions = CFSwapInt16LittleToHost(crank)
+        lastCrankEventTime = TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/timeScale)
     }
 
     func timeIntervalForCurrentSample(_ current: TimeInterval, previous: TimeInterval ) -> TimeInterval {
         var timeDiff: TimeInterval = 0
-        if  current >= previous {
+        if current >= previous {
             timeDiff = current - previous
         } else {
             // passed the maximum value
-            timeDiff =  (TimeInterval((Double( UINT16_MAX) / timeScale)) - previous) + current
+            timeDiff = (TimeInterval((Double( UINT16_MAX) / timeScale)) - previous) + current
         }
         return timeDiff
     }
 
-    func valuesForPreviousMeasurement( previousSample: BluetoothSpeedAndCadenceDataPoint? ) -> ( cadenceinRPM: Double?, distanceinMeters: Double?, speedInMetersPerSecond: Double?)? {
+    func valuesForPreviousMeasurement(previousSample: BluetoothSpeedAndCadenceDataPoint?) -> ( cadenceinRPM: Double?, distanceinMeters: Double?, speedInMetersPerSecond: Double?)? {
 
         var distance: Double?, cadence: Double?, speed: Double?
         guard let previousSample = previousSample else {
             return nil
         }
-        if  hasWheel && previousSample.hasWheel {
+        if  isSpeedSensorAvailable && previousSample.isSpeedSensorAvailable {
             let wheelTimeDiff = timeIntervalForCurrentSample(lastWheelEventTime, previous: previousSample.lastWheelEventTime)
 
             let valueDiff = valueDiffForCurrentSample(cumulativeWheelRevolutions, previous: previousSample.cumulativeWheelRevolutions, max: UInt32.max)
@@ -105,7 +107,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             }
         }
 
-        if  hasCrank && previousSample.hasCrank {
+        if  isCadenceSensorAvailable && previousSample.isCadenceSensorAvailable {
             let crankDiffTime = timeIntervalForCurrentSample(lastCrankEventTime, previous: previousSample.lastCrankEventTime)
             let valueDiff = Double(valueDiffForCurrentSample(cumulativeCrankRevolutions, previous: previousSample.cumulativeCrankRevolutions, max: UInt16.max))
 
@@ -131,7 +133,7 @@ extension BluetoothSpeedAndCadenceDataPoint {
         if   current >= previous {
             diff = current - previous
         } else {
-            diff = ( max - previous ) + current
+            diff = (max - previous) + current
         }
         return diff
     }
@@ -141,17 +143,17 @@ extension BluetoothSpeedAndCadenceDataPoint {
         if   current >= previous {
             diff = current - previous
         } else {
-            diff = ( max - previous ) + current
+            diff = (max - previous) + current
         }
         return diff
     }
 
     func valueDiffForCurrentSample(_ current: UInt16, previous: UInt16, max: UInt16) -> UInt16 {
         var diff: UInt16 = 0
-        if   current >= previous {
+        if current >= previous {
             diff = current - previous
         } else {
-            diff = ( max - previous ) + current
+            diff = (max - previous) + current
         }
         return diff
     }
