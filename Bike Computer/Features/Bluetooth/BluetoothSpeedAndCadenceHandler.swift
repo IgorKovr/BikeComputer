@@ -15,10 +15,10 @@ class BluetoothSpeedAndCadenceHandler: NSObject, ServiceHandling {
     @Published private var _distanceInMeters: Double = 0
 
     // MARK: - Private Properties
-    private let cyclingSpeedAndCadenceMeasurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
-    private let cyclingSpeedAndCadenceFeatureCharacteristicsCBUUID = CBUUID(string: "2a5c")
+    private let measurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
+    private let featureCharacteristicsCBUUID = CBUUID(string: "2a5c")
     private let sensorLocationCharacteristicsCBUUID = CBUUID(string: "2a5d")
-    private let speedAndCadenceControlPointCBUUID = CBUUID(string: "2a55")
+    private let controlPointCBUUID = CBUUID(string: "2a55")
 
     /// Imperical value for wheel Circumference
     /// Diameter * Pi
@@ -97,11 +97,11 @@ extension BluetoothSpeedAndCadenceHandler: CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         switch characteristic.uuid {
-        case cyclingSpeedAndCadenceMeasurementCharacteristicsCBUUID:
+        case measurementCharacteristicsCBUUID:
             guard let data = characteristic.value else { return }
 
             handleMeasurement(data)
-        case cyclingSpeedAndCadenceFeatureCharacteristicsCBUUID:
+        case featureCharacteristicsCBUUID:
             print("cyclingSpeedAndCadenceMeasurementCBUUID: \(characteristic)")
         case sensorLocationCharacteristicsCBUUID:
             print("sensorLocationCharacteristicsCBUUID: \(characteristic)")

@@ -17,7 +17,6 @@ protocol GPSSerivceProtocol {
 }
 
 class GPSSerivce: NSObject, GPSSerivceProtocol {
-
     // MARK: - Public Propeties
 
     // Manually expose speed publisher

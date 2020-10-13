@@ -116,9 +116,12 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
     }
 
     var debugDescription: String {
-        get {
-            return "Wheel Revs: \(cumulativeWheelRevolutions). Last wheel event time: \(lastWheelEventTime). Crank Revs: \(cumulativeCrankRevolutions). Last Crank event time: \(lastCrankEventTime)"
-        }
+        """
+        Wheel Revs: \(cumulativeWheelRevolutions).
+        Last wheel event time: \(lastWheelEventTime).
+        Crank Revs: \(cumulativeCrankRevolutions).
+        Last Crank event time: \(lastCrankEventTime)
+        """
     }
 }
 
