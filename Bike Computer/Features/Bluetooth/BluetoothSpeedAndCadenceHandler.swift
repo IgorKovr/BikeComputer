@@ -20,7 +20,10 @@ class BluetoothSpeedAndCadenceHandler: NSObject, ServiceHandling {
     private let sensorLocationCharacteristicsCBUUID = CBUUID(string: "2a5d")
     private let speedAndCadenceControlPointCBUUID = CBUUID(string: "2a55")
     
-    private let defaultWheelСircumferenceInMeters: Double = 3.2*700/1000 // Pi * diameter
+    /// Imperical value for wheel Circumference
+    /// Diameter * Pi
+    /// ~ 680 * 3.14 (680 is a comon actual diameter for 700c wheel)
+    private let defaultWheelСircumferenceInMeters: Double = 2096/1000
     
     private var firstMeasurement: BluetoothSpeedAndCadenceDataPoint?
     private var lastMeasurement: BluetoothSpeedAndCadenceDataPoint?
