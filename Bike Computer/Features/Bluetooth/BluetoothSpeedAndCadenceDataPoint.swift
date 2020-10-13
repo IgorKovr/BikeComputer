@@ -113,8 +113,8 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             
             cadence = (crankDiffTime == 0) ? 0 : Double(60.0 * valueDiff / crankDiffTime) // RPM
         }
-        print( "Cadence: \(cadence) RPM. Distance: \(distance) meters. Speed: \(speed) Km/h" )
-        return ( cadenceinRPM:cadence, distanceinMeters:distance, speedInMetersPerSecond:speed)
+        print("Cadence: \(String(describing: cadence)) RPM. Distance: \(String(describing: distance)) meters. Speed: \(String(describing: speed)) Km/h")
+        return (cadenceinRPM:cadence, distanceinMeters:distance, speedInMetersPerSecond:speed)
     }
     
     var debugDescription:String {
