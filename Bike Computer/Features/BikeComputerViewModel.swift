@@ -5,7 +5,13 @@ class BikeComputerViewModel: ObservableObject {
 
     // MARK: - Public Properties
 
-    @Published var speed: String = ""
+    @Published var shouldShowBTSpeed: Bool = false
+    @Published var shouldShowGPSSpeed: Bool = false
+    @Published var shouldShowHeartRate: Bool = false
+    @Published var shouldShowCadence: Bool = false
+    @Published var shouldShowAvarageSpeed: Bool = false
+
+    @Published var gpsSpeed: String = ""
     @Published var heartRate: String = ""
     @Published var speedBT: String = ""
     @Published var cadence: String = ""
@@ -20,7 +26,7 @@ class BikeComputerViewModel: ObservableObject {
     private let bluetoothSensor: BluetoothServiceProtocol
 
     private let sessionStartTimestamp: Date
-    private var curentSessionTimeInterval: TimeInterval = 0
+    private var curentSessionTimeInterval: TimeInterval = 1
 
     // MARK: - Initializer
 
@@ -63,7 +69,12 @@ class BikeComputerViewModel: ObservableObject {
             .store(in: &subscriptions)
 
         bluetoothSensor.distanceInMeters
-            .map { String(format: "%.f", ($0 / self.curentSessionTimeInterval).kmph) }
+            .map {
+                guard self.curentSessionTimeInterval.isZero else {
+                    return "0"
+                }
+                return String(format: "%.f", ($0 / self.curentSessionTimeInterval).kmph)
+            }
             .assign(to: \.averageSpeed, on: self)
             .store(in: &subscriptions)
     }
@@ -71,7 +82,7 @@ class BikeComputerViewModel: ObservableObject {
     private func startObservingGpsService() {
         gpsService.speed
             .map { String(format: "%.1f", $0.kmph) }
-            .assign(to: \.speed, on: self)
+            .assign(to: \.gpsSpeed, on: self)
             .store(in: &subscriptions)
     }
 
