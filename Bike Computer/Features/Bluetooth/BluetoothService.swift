@@ -8,12 +8,14 @@
 
 import CoreBluetooth
 
-protocol ServiceHandling: CBPeripheralDelegate {
+/// Describes a Handler for a Bluetooth device
+protocol BletoothDeviceHandling: CBPeripheralDelegate {
 
     var isConnected: Bool { get set }
     var uuid: CBUUID { get }
 }
 
+/// The service to handle Bluetooth connections
 protocol BluetoothServiceProtocol {
 
     var heartRate: Published<Int>.Publisher { get }
@@ -39,8 +41,8 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     private let bikePowerHandler: BluetoothSpeedAndCadenceHandler
     private var centralManager: CBCentralManager!
     private var supportedPeripherals = [CBPeripheral]()
-    private var services: [ServiceHandling]
-    private var currentServiceForScan: ServiceHandling?
+    private var services: [BletoothDeviceHandling]
+    private var currentServiceForScan: BletoothDeviceHandling?
 
     // MARK: - Initializers
 
@@ -58,6 +60,8 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     func startBluetoothScan() {
         centralManager = CBCentralManager(delegate: self, queue: nil)
     }
+
+    // MARK: - Private Functions
 
     private func logBluetoothManagerState(_ state: CBManagerState) {
         switch state {
@@ -78,7 +82,7 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
         }
     }
 
-    func scanForNextService() {
+    private func scanForNextService() {
         if let unconnectedServices = services.first(where: { $0.isConnected == false}) {
             currentServiceForScan = unconnectedServices
             centralManager.scanForPeripherals(withServices: [unconnectedServices.uuid])
@@ -121,5 +125,17 @@ extension BluetoothService: CBCentralManagerDelegate {
         peripheral.discoverServices([currentServiceForScan.uuid])
         currentServiceForScan.isConnected = true
         scanForNextService()
+    }
+
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+
+        // FIXME: set the values of the perifial to nill when disconnected
+
+        let disconnectedPrefipheral = services.first(where: {
+            let knownServicesUUID = $0.uuid
+            return peripheral.services?.contains { $0.uuid == knownServicesUUID } ?? false
+        })
+
+        // FIXME: return 
     }
 }

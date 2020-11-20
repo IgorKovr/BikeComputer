@@ -106,13 +106,13 @@
 		094DDDFA23E9C50500EA1951 /* Bike Computer */ = {
 			isa = PBXGroup;
 			children = (
+				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
+				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
+				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
 				094DDE0923E9C50700EA1951 /* Info.plist */,
 				099D812B247EFB7B008033C6 /* Recources */,
 				099D812F247EFCE4008033C6 /* Extensions */,
 				09B97A81249929BE0051AD99 /* Features */,
-				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
-				094DDDFB23E9C50500EA1951 /* AppDelegate.swift */,
-				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
 				094DDE0323E9C50700EA1951 /* Preview Content */,
 				094DDE1123E9C50700EA1951 /* Bike ComputerTests */,
 			);

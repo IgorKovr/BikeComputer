@@ -1,7 +1,7 @@
 import CoreBluetooth
 import Combine
 
-class BluetoothSpeedAndCadenceHandler: NSObject, ServiceHandling {
+class BluetoothSpeedAndCadenceHandler: NSObject, BletoothDeviceHandling {
 
     // MARK: - Public Properties
 

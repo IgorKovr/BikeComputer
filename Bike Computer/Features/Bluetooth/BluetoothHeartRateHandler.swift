@@ -8,7 +8,7 @@
 
 import CoreBluetooth
 
-protocol BluetoothHeartRatePeripheralHandling: NSObject, ServiceHandling {
+protocol BluetoothHeartRatePeripheralHandling: NSObject, BletoothDeviceHandling {
 
     var heartRate: Published<Int>.Publisher { get }
 }
