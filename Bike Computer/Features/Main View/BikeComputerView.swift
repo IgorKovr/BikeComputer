@@ -42,19 +42,23 @@ struct BikeComputerView: View {
                         .frame(maxWidth: .infinity)
                 }
             }
-            Group {
-                Text("🛣")
-                    .font(.system(size: 25))
-                Text(viewModel.distance)
-                    .font(.system(size: 60, design: .monospaced))
-                    .frame(maxWidth: .infinity)
+            if viewModel.shouldShowDistance {
+                Group {
+                    Text("🛣")
+                        .font(.system(size: 25))
+                    Text(viewModel.distance)
+                        .font(.system(size: 60, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                }
             }
-            Group {
-                Text("🗺")
-                    .font(.system(size: 25))
-                Text(viewModel.averageSpeed)
-                    .font(.system(size: 60, design: .monospaced))
-                    .frame(maxWidth: .infinity)
+            if viewModel.shouldShowAvarageSpeed {
+                Group {
+                    Text("🗺")
+                        .font(.system(size: 25))
+                    Text(viewModel.averageSpeed)
+                        .font(.system(size: 60, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                }
             }
             Group {
                 Text("⏱")

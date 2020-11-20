@@ -130,12 +130,9 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
 
         // FIXME: set the values of the perifial to nill when disconnected
-
         let disconnectedPrefipheral = services.first(where: {
             let knownServicesUUID = $0.uuid
             return peripheral.services?.contains { $0.uuid == knownServicesUUID } ?? false
         })
-
-        // FIXME: return 
     }
 }

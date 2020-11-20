@@ -10,6 +10,7 @@ class BikeComputerViewModel: ObservableObject {
     @Published var shouldShowHeartRate: Bool = false
     @Published var shouldShowCadence: Bool = false
     @Published var shouldShowAvarageSpeed: Bool = false
+    @Published var shouldShowDistance: Bool = false
 
     @Published var gpsSpeed: String = ""
     @Published var heartRate: String = ""
@@ -50,31 +51,47 @@ class BikeComputerViewModel: ObservableObject {
 
     private func startObservingBluetoothSensor() {
         bluetoothSensor.heartRate
-            .map { String(format: "\($0)") }
+            .map { [weak self] in
+                self?.shouldShowHeartRate = true
+                return String(format: "\($0)")
+            }
             .assign(to: \.heartRate, on: self)
             .store(in: &subscriptions)
 
         bluetoothSensor.speedInMetersPerSecond
-            .map { String(format: "%.1f", $0.kmph) }
+            .map { [weak self] in
+                self?.shouldShowBTSpeed = true
+                return String(format: "%.1f", $0.kmph)
+            }
             .assign(to: \.speedBT, on: self)
             .store(in: &subscriptions)
 
         bluetoothSensor.cadence
-            .map { String(format: "\($0)") }
+            .map { [weak self] in
+                self?.shouldShowCadence = true
+                return String(format: "\($0)")
+            }
             .assign(to: \.cadence, on: self)
             .store(in: &subscriptions)
 
         bluetoothSensor.distanceInMeters
-            .map { String(format: "%.f", $0.rounded()) }
+            .map { [weak self] in
+                self?.shouldShowDistance = true
+                return String(format: "%.f", $0.rounded())
+            }
             .assign(to: \.distance, on: self)
             .store(in: &subscriptions)
 
         bluetoothSensor.distanceInMeters
-            .map {
-                guard self.curentSessionTimeInterval.isZero else {
+            .map { [weak self] in
+                self?.shouldShowAvarageSpeed = true
+
+                guard let interval = self?.curentSessionTimeInterval,
+                      !interval.isZero else {
                     return "0"
                 }
-                return String(format: "%.f", ($0 / self.curentSessionTimeInterval).kmph)
+
+                return String(format: "%.f", ($0 / interval).kmph)
             }
             .assign(to: \.averageSpeed, on: self)
             .store(in: &subscriptions)
@@ -106,10 +123,13 @@ private extension BikeComputerViewModel {
                 case let .failure(error): self?.receiveGPSError(error)
                 }
             }
+
             .store(in: &subscriptions)
     }
 
     private func receiveGPSError(_ error: GPSSerivceError) {
+        shouldShowGPSSpeed = false
+        
         switch error {
         case .locationUnknown:
             print("Couldn't read the location")
@@ -122,6 +142,7 @@ private extension BikeComputerViewModel {
     }
 
     private func receiveGPSValue(_ speed: Double) {
+        shouldShowGPSSpeed = true
         gpsSpeed = String(format: "%.1f", speed.kmph)
     }
 
