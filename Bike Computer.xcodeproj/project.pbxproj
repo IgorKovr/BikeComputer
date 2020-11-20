@@ -16,6 +16,7 @@
 		094DDE0823E9C50700EA1951 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */; };
 		094DDE1323E9C50700EA1951 /* Bike_ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094DDE1223E9C50700EA1951 /* Bike_ComputerTests.swift */; };
 		098E964024771AAA00046FCF /* GPSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098E963F24771AAA00046FCF /* GPSService.swift */; };
+		098F6F0025682798003C2F35 /* AppSettingsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098F6EFF25682798003C2F35 /* AppSettingsHandler.swift */; };
 		099D812C247EFBEA008033C6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 099D812E247EFBEA008033C6 /* Localizable.strings */; };
 		099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */; };
 		099D8135247F0071008033C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 099D8134247F0071008033C6 /* InfoPlist.strings */; };
@@ -52,6 +53,7 @@
 		094DDE1223E9C50700EA1951 /* Bike_ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bike_ComputerTests.swift; sourceTree = "<group>"; };
 		094DDE1423E9C50700EA1951 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		098E963F24771AAA00046FCF /* GPSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSService.swift; sourceTree = "<group>"; };
+		098F6EFF25682798003C2F35 /* AppSettingsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsHandler.swift; sourceTree = "<group>"; };
 		099D812D247EFBEA008033C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		099D8130247EFD0C008033C6 /* StringLocalizationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLocalizationExtension.swift; sourceTree = "<group>"; };
 		099D8134247F0071008033C6 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -110,9 +112,10 @@
 				094DDDFD23E9C50500EA1951 /* SceneDelegate.swift */,
 				094DDE0623E9C50700EA1951 /* LaunchScreen.storyboard */,
 				094DDE0923E9C50700EA1951 /* Info.plist */,
-				099D812B247EFB7B008033C6 /* Recources */,
 				099D812F247EFCE4008033C6 /* Extensions */,
+				098F6EFE2568277E003C2F35 /* Helper Classes */,
 				09B97A81249929BE0051AD99 /* Features */,
+				099D812B247EFB7B008033C6 /* Recources */,
 				094DDE0323E9C50700EA1951 /* Preview Content */,
 				094DDE1123E9C50700EA1951 /* Bike ComputerTests */,
 			);
@@ -134,6 +137,23 @@
 				094DDE1423E9C50700EA1951 /* Info.plist */,
 			);
 			path = "Bike ComputerTests";
+			sourceTree = "<group>";
+		};
+		098F6EFA25681189003C2F35 /* Main View */ = {
+			isa = PBXGroup;
+			children = (
+				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
+				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
+			);
+			path = "Main View";
+			sourceTree = "<group>";
+		};
+		098F6EFE2568277E003C2F35 /* Helper Classes */ = {
+			isa = PBXGroup;
+			children = (
+				098F6EFF25682798003C2F35 /* AppSettingsHandler.swift */,
+			);
+			path = "Helper Classes";
 			sourceTree = "<group>";
 		};
 		099D812B247EFB7B008033C6 /* Recources */ = {
@@ -178,10 +198,9 @@
 		09B97A81249929BE0051AD99 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				09B97A84249A55100051AD99 /* Bluetooth */,
-				094DDDFF23E9C50500EA1951 /* BikeComputerView.swift */,
-				09135D9F23F1610F00601377 /* BikeComputerViewModel.swift */,
+				098F6EFA25681189003C2F35 /* Main View */,
 				098E963F24771AAA00046FCF /* GPSService.swift */,
+				09B97A84249A55100051AD99 /* Bluetooth */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -335,6 +354,7 @@
 				09B97A8D249CF1370051AD99 /* TimeIntervalExtension.swift in Sources */,
 				099D8131247EFD0C008033C6 /* StringLocalizationExtension.swift in Sources */,
 				09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */,
+				098F6F0025682798003C2F35 /* AppSettingsHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

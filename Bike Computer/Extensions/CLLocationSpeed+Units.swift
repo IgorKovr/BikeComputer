@@ -12,6 +12,5 @@ import CoreLocation
 private let mpsToKmph = 3.6
 
 extension CLLocationSpeed {
-
     var kmph: CLLocationSpeed { return self * mpsToKmph }
 }

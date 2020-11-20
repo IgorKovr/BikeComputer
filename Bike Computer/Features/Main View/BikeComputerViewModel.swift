@@ -24,6 +24,7 @@ class BikeComputerViewModel: ObservableObject {
     private var subscriptions = [AnyCancellable]()
     private let gpsService: GPSSerivceProtocol
     private let bluetoothSensor: BluetoothServiceProtocol
+    private let appSettingsHandler: AppSettingsHandler
 
     private let sessionStartTimestamp: Date
     private var curentSessionTimeInterval: TimeInterval = 1
@@ -31,15 +32,15 @@ class BikeComputerViewModel: ObservableObject {
     // MARK: - Initializer
 
     init(gpsService: GPSSerivceProtocol = GPSSerivce(),
-         bluetoothSensor: BluetoothService = BluetoothService()) {
+         bluetoothSensor: BluetoothService = BluetoothService(),
+         appSettingsHandler: AppSettingsHandler = AppSettingsHandler()) {
         self.gpsService = gpsService
         self.bluetoothSensor = bluetoothSensor
+        self.appSettingsHandler = appSettingsHandler
         sessionStartTimestamp = Date()
 
         setupTimer()
-        gpsService.requestUserAuthorizationIfNeeded()
-        gpsService.startUpdatingLocation()
-        startObservingGpsService()
+        startGpsService()
 
         bluetoothSensor.startBluetoothScan()
         startObservingBluetoothSensor()
@@ -79,13 +80,6 @@ class BikeComputerViewModel: ObservableObject {
             .store(in: &subscriptions)
     }
 
-    private func startObservingGpsService() {
-        gpsService.speed
-            .map { String(format: "%.1f", $0.kmph) }
-            .assign(to: \.gpsSpeed, on: self)
-            .store(in: &subscriptions)
-    }
-
     private func setupTimer() {
         let publisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default).autoconnect()
         let subscription = publisher
@@ -95,5 +89,44 @@ class BikeComputerViewModel: ObservableObject {
         }
             .assign(to: \.curentSessionTime, on: self)
         subscriptions.append(subscription)
+    }
+}
+
+// MARK: - GPS Handling
+private extension BikeComputerViewModel {
+
+    private func startGpsService() {
+        gpsService.requestUserAuthorizationIfNeeded()
+        gpsService.startUpdatingLocation()
+
+        gpsService.speed
+            .sink { [weak self] in
+                switch $0 {
+                case let .success(speed): self?.receiveGPSValue(speed)
+                case let .failure(error): self?.receiveGPSError(error)
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
+    private func receiveGPSError(_ error: GPSSerivceError) {
+        switch error {
+        case .locationUnknown:
+            print("Couldn't read the location")
+        case .denied:
+            print("Location services denied")
+            onLocationDeniedReceived()
+        case .unknown:
+            print("Unknown Location services Error")
+        }
+    }
+
+    private func receiveGPSValue(_ speed: Double) {
+        gpsSpeed = String(format: "%.1f", speed.kmph)
+    }
+
+    private func onLocationDeniedReceived() {
+        appSettingsHandler.openAppSettings()
+        gpsService.stopUpdatingLocation()
     }
 }

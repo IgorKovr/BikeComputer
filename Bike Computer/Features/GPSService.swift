@@ -10,20 +10,27 @@ import Foundation
 import CoreLocation
 import Combine
 
+enum GPSSerivceError: Error {
+    case locationUnknown
+    case denied
+    case unknown
+}
+
 protocol GPSSerivceProtocol {
     func requestUserAuthorizationIfNeeded()
+    func stopUpdatingLocation()
     func startUpdatingLocation()
-    var speed: Published<Double>.Publisher { get }
+    var speed: Published<Result<Double, GPSSerivceError>>.Publisher { get }
 }
 
 class GPSSerivce: NSObject, GPSSerivceProtocol {
     // MARK: - Public Propeties
 
     // Manually expose speed publisher
-    var speed: Published<Double>.Publisher { $_speed }
+    var speed: Published<Result<Double, GPSSerivceError>>.Publisher { $_speed }
 
     // MARK: - Private properties
-    @Published private var _speed: Double = 0.0
+    @Published private var _speed: Result<Double, GPSSerivceError> = .success(0.0)
 
     private let locationManager: CLLocationManager
 
@@ -56,6 +63,10 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
         locationManager.requestWhenInUseAuthorization()
     }
 
+    func stopUpdatingLocation() {
+        locationManager.stopUpdatingLocation()
+    }
+
     // MARK: - Private functions
     private func setupLocationManager() {
         locationManager.delegate = self
@@ -68,14 +79,30 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
 extension GPSSerivce: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let lastSpeed = locations.last?.speed,
-            lastSpeed >= 0 // TODO: Negative Speed means invalid data. Add invalid data handling.
-            else { return }
+        guard let lastSpeed = locations.last?.speed, lastSpeed >= 0 else {
+            _speed = .failure(.locationUnknown)
+            return
+        }
 
-        self._speed = lastSpeed
+        self._speed = .success(lastSpeed)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
+        // Check if the error is CLError
+        guard let coreLocationError = error as? CLError else {
+            self._speed = .failure(.denied)
+            print("CLLocationManager Failed with unknown error: \(error.localizedDescription) \n")
+            return
+        }
+
+        // Switch CLError
+        switch coreLocationError {
+        case CLError.locationUnknown:
+            self._speed = .failure(.locationUnknown)
+        case CLError.denied:
+            self._speed = .failure(.denied)
+        default:
+            self._speed = .failure(.unknown)
+        }
     }
 }
