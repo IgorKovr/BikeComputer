@@ -19,6 +19,8 @@ class BikeComputerViewModel: ObservableObject {
     @Published var averageSpeed: String = ""
     @Published var distance: String = ""
     @Published var curentSessionTime: String = ""
+    
+    @Published var showsSettingsAlert: Bool = false
 
     // MARK: - Private Properties
 
@@ -45,6 +47,12 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.startBluetoothScan()
         startObservingBluetoothSensor()
+    }
+    
+    // MARK: Private functions
+    
+    func settingsAlertViewTappedOk() {
+        appSettingsHandler.openAppSettings()
     }
 
     // MARK: - Private Functions
@@ -129,7 +137,7 @@ private extension BikeComputerViewModel {
 
     private func receiveGPSError(_ error: GPSSerivceError) {
         shouldShowGPSSpeed = false
-        
+
         switch error {
         case .locationUnknown:
             print("Couldn't read the location")
@@ -147,7 +155,11 @@ private extension BikeComputerViewModel {
     }
 
     private func onLocationDeniedReceived() {
-        appSettingsHandler.openAppSettings()
+        
+        // FIXME: Refactor Alert View showing
+        showsSettingsAlert = true
+//        showsSettingsAlert = false
+        
         gpsService.stopUpdatingLocation()
     }
 }
