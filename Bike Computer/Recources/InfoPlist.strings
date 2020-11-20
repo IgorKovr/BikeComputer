@@ -6,4 +6,4 @@
   Copyright © 2020 IgorK. All rights reserved.
 */
 
-"NSLocationWhenInUseUsageDescription" = "Please Allow Location Access for Speed Tracking";
+"NSLocationWhenInUseUsageDescription" = "Location is used for Speed Tracking";
