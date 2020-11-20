@@ -52,7 +52,7 @@ class BikeComputerViewModel: ObservableObject {
     private func startObservingBluetoothSensor() {
         bluetoothSensor.heartRate
             .map { [weak self] in
-                self?.shouldShowHeartRate = true
+                self?.shouldShowHeartRate = ($0 != 0)
                 return String(format: "\($0)")
             }
             .assign(to: \.heartRate, on: self)
@@ -60,7 +60,7 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.speedInMetersPerSecond
             .map { [weak self] in
-                self?.shouldShowBTSpeed = true
+                self?.shouldShowBTSpeed = !$0.isZero
                 return String(format: "%.1f", $0.kmph)
             }
             .assign(to: \.speedBT, on: self)
@@ -68,7 +68,7 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.cadence
             .map { [weak self] in
-                self?.shouldShowCadence = true
+                self?.shouldShowCadence = !$0.isZero
                 return String(format: "\($0)")
             }
             .assign(to: \.cadence, on: self)
@@ -76,7 +76,7 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.distanceInMeters
             .map { [weak self] in
-                self?.shouldShowDistance = true
+                self?.shouldShowDistance = !$0.isZero
                 return String(format: "%.f", $0.rounded())
             }
             .assign(to: \.distance, on: self)
@@ -84,7 +84,7 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.distanceInMeters
             .map { [weak self] in
-                self?.shouldShowAvarageSpeed = true
+                self?.shouldShowAvarageSpeed = !$0.isZero
 
                 guard let interval = self?.curentSessionTimeInterval,
                       !interval.isZero else {
