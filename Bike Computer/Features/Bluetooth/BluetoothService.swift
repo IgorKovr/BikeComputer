@@ -40,6 +40,8 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     private let heartRatePeripheralHandler: BluetoothHeartRatePeripheralHandling
     private let bikePowerHandler: BluetoothSpeedAndCadenceHandler
     private var centralManager: CBCentralManager!
+
+    // supportedPeripherals is used to keep strong reference to the connected Peripherals
     private var supportedPeripherals = [CBPeripheral]()
     private var services: [BletoothDeviceHandling]
     private var currentServiceForScan: BletoothDeviceHandling?
@@ -108,7 +110,7 @@ extension BluetoothService: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
                         advertisementData: [String: Any], rssi RSSI: NSNumber) {
-        print("Discovered peripheral: \(peripheral)")
+        print("Discovered peripheral: \n \(peripheral)")
 
         supportedPeripherals.append(peripheral)
         peripheral.delegate = currentServiceForScan
@@ -118,7 +120,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        print("Connected peripheral: \(peripheral)")
+        print("Connected peripheral: \n \(peripheral)")
 
         guard let currentServiceForScan = currentServiceForScan else { return }
 
@@ -128,11 +130,11 @@ extension BluetoothService: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-
-        // FIXME: set the values of the perifial to nill when disconnected
-        let disconnectedPrefipheral = services.first(where: {
-            let knownServicesUUID = $0.uuid
-            return peripheral.services?.contains { $0.uuid == knownServicesUUID } ?? false
+        let disconnectedService = services.first(where: {
+            peripheral.delegate?.isEqual($0) ?? false
         })
+
+        disconnectedService?.isConnected = false
+        scanForNextService()
     }
 }

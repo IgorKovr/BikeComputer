@@ -111,7 +111,7 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
             let crankDiffTime = timeIntervalForCurrentSample(lastCrankEventTime, previous: previousSample.lastCrankEventTime)
             let valueDiff = Double(valueDiffForCurrentSample(cumulativeCrankRevolutions, previous: previousSample.cumulativeCrankRevolutions, max: UInt16.max))
 
-            cadence = (crankDiffTime == 0) ? 0 : Double(60.0 * valueDiff / crankDiffTime) // RPM
+            cadence = (crankDiffTime == 0) ? nil : Double(60.0 * valueDiff / crankDiffTime) // RPM
         }
         print("Cadence: \(String(describing: cadence)) RPM. Distance: \(String(describing: distance)) meters. Speed: \(String(describing: speed)) Km/h")
         return (cadenceinRPM:cadence, distanceinMeters:distance, speedInMetersPerSecond:speed)
