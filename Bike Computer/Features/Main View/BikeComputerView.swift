@@ -13,6 +13,7 @@ struct BikeComputerView: View {
                     Text(viewModel.speedBT)
                         .font(.system(size: 80, design: .monospaced))
                         .frame(maxWidth: .infinity)
+                    Spacer().frame(height: 24)
                 }
             }
             if viewModel.shouldShowGPSSpeed {
@@ -22,6 +23,7 @@ struct BikeComputerView: View {
                     Text(viewModel.gpsSpeed)
                         .font(.system(size: 80, design: .monospaced))
                         .frame(maxWidth: .infinity)
+                    Spacer().frame(height: 24)
                 }
             }
             if viewModel.shouldShowHeartRate {
@@ -31,6 +33,7 @@ struct BikeComputerView: View {
                     Text(viewModel.heartRate)
                         .font(.system(size: 60, design: .monospaced))
                         .frame(maxWidth: .infinity)
+                    Spacer().frame(height: 24)
                 }
             }
             if viewModel.shouldShowCadence {

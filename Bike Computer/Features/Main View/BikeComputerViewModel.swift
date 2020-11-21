@@ -79,7 +79,9 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.distanceInMeters
             .map { [weak self] in
-                self?.shouldShowDistance = !$0.isZero
+
+                // TODO: Enable in the next version
+//                self?.shouldShowDistance = !$0.isZero
                 return String(format: "%.f", $0.rounded())
             }
             .assign(to: \.distance, on: self)
@@ -87,7 +89,9 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.distanceInMeters
             .map { [weak self] in
-                self?.shouldShowAvarageSpeed = !$0.isZero
+
+                // TODO: Enable in the next version
+//                self?.shouldShowAvarageSpeed = !$0.isZero
 
                 guard let interval = self?.curentSessionTimeInterval,
                       !interval.isZero else {
