@@ -105,4 +105,17 @@ extension GPSSerivce: CLLocationManagerDelegate {
             self._speed = .failure(.unknown)
         }
     }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .notDetermined, .denied, .restricted:
+            self._speed = .failure(.denied)
+        case .authorizedAlways, .authorizedWhenInUse:
+            startUpdatingLocation()
+            print("Location Usage Authorised")
+        @unknown default:
+            assertionFailure("Unknown CLAuthorizationStatus")
+        }
+    }
 }
+

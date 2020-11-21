@@ -63,6 +63,7 @@ class BikeComputerViewModel: ObservableObject {
         bluetoothSensor.speedInMetersPerSecond
             .map { [weak self] in
                 self?.shouldShowBTSpeed = !$0.isZero
+                self?.shouldShowGPSSpeed = $0.isZero
                 return String(format: "%.1f", $0.kmph)
             }
             .assign(to: \.speedBT, on: self)
@@ -71,7 +72,7 @@ class BikeComputerViewModel: ObservableObject {
         bluetoothSensor.cadence
             .map { [weak self] in
                 self?.shouldShowCadence = !$0.isZero
-                return String(format: "\($0)")
+                return String(format: "%.f", $0.rounded())
             }
             .assign(to: \.cadence, on: self)
             .store(in: &subscriptions)
@@ -135,6 +136,12 @@ private extension BikeComputerViewModel {
         switch error {
         case .locationUnknown:
             print("Couldn't read the location")
+            // Only show GPS speed if the BT Speed is not available
+            if shouldShowBTSpeed == false {
+                shouldShowGPSSpeed = true
+            }
+
+            gpsSpeed = "-"
         case .denied:
             print("Location services denied")
             onLocationDeniedReceived()
@@ -153,8 +160,8 @@ private extension BikeComputerViewModel {
 
     private func onLocationDeniedReceived() {
         alertProvider.alert = AlertProvider.Alert(
-            title: "Turn the Location Service on?",
-            message: "We need the Location Service in order to display your curent speed",
+            title: "Location Service is disabled",
+            message: #"Set it to "While using the App" in the settings"#,
             primaryButtomText: "Ok",
             primaryButtonAction: { [weak self] in
                 self?.appSettingsHandler.openAppSettings()
