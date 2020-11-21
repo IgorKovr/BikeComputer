@@ -38,11 +38,12 @@ struct BikeComputerView: View {
             }
             if viewModel.shouldShowCadence {
                 Group {
-                    Text("Cadence")
+                    Text("⚙️")
                         .font(.system(size: 25))
                     Text(viewModel.cadence)
-                        .font(.system(size: 80.0, design: .monospaced))
+                        .font(.system(size: 60, design: .monospaced))
                         .frame(maxWidth: .infinity)
+                    Spacer().frame(height: 24)
                 }
             }
             if viewModel.shouldShowDistance {
@@ -50,7 +51,7 @@ struct BikeComputerView: View {
                     Text("🛣")
                         .font(.system(size: 25))
                     Text(viewModel.distance)
-                        .font(.system(size: 60, design: .monospaced))
+                        .font(.system(size: 60))
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -59,7 +60,7 @@ struct BikeComputerView: View {
                     Text("🗺")
                         .font(.system(size: 25))
                     Text(viewModel.averageSpeed)
-                        .font(.system(size: 60, design: .monospaced))
+                        .font(.system(size: 60))
                         .frame(maxWidth: .infinity)
                 }
             }
