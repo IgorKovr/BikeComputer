@@ -11,7 +11,6 @@ import CoreLocation
 import Combine
 
 enum GPSSerivceError: Error {
-    case locationUnknown
     case denied
     case unknown
 }
@@ -20,18 +19,15 @@ protocol GPSSerivceProtocol {
     func requestUserAuthorizationIfNeeded()
     func stopUpdatingLocation()
     func startUpdatingLocation()
-    var speed: Published<Result<Double, GPSSerivceError>>.Publisher { get }
+    var speed: PassthroughSubject<Double, GPSSerivceError> { get }
 }
 
 class GPSSerivce: NSObject, GPSSerivceProtocol {
     // MARK: - Public Propeties
 
-    // Manually expose speed publisher
-    var speed: Published<Result<Double, GPSSerivceError>>.Publisher { $_speed }
+    private(set) var speed = PassthroughSubject<Double, GPSSerivceError>()
 
     // MARK: - Private properties
-    @Published private var _speed: Result<Double, GPSSerivceError> = .failure(.locationUnknown)
-
     private let locationManager: CLLocationManager
 
     // MARK: - Constants
@@ -52,7 +48,6 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
 
     // MARK: - Public Properties
 
-    // FIXME: Need to restart after User Grants Permission
     func startUpdatingLocation() {
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
@@ -80,17 +75,17 @@ extension GPSSerivce: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let lastSpeed = locations.last?.speed, lastSpeed >= 0 else {
-            _speed = .failure(.locationUnknown)
+            print("Couldn't read the location")
             return
         }
 
-        self._speed = .success(lastSpeed)
+        speed.send(lastSpeed)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // Check if the error is CLError
         guard let coreLocationError = error as? CLError else {
-            self._speed = .failure(.denied)
+            speed.send(completion: .failure(.denied))
             print("CLLocationManager Failed with unknown error: \(error.localizedDescription) \n")
             return
         }
@@ -98,18 +93,18 @@ extension GPSSerivce: CLLocationManagerDelegate {
         // Switch CLError
         switch coreLocationError {
         case CLError.locationUnknown:
-            self._speed = .failure(.locationUnknown)
+            print("Couldn't read the location")
         case CLError.denied:
-            self._speed = .failure(.denied)
+            speed.send(completion: .failure(.denied))
         default:
-            self._speed = .failure(.unknown)
+            speed.send(completion: .failure(.unknown))
         }
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .notDetermined, .denied, .restricted:
-            self._speed = .failure(.denied)
+            speed.send(completion: .failure(.denied))
         case .authorizedAlways, .authorizedWhenInUse:
             startUpdatingLocation()
             print("Location Usage Authorised")
@@ -118,4 +113,3 @@ extension GPSSerivce: CLLocationManagerDelegate {
         }
     }
 }
-

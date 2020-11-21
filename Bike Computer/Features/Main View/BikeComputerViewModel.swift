@@ -78,7 +78,8 @@ class BikeComputerViewModel: ObservableObject {
             .store(in: &subscriptions)
 
         bluetoothSensor.distanceInMeters
-            .map { [weak self] in
+            .map {
+//                [weak self] in
 
                 // TODO: Enable in the next version
 //                self?.shouldShowDistance = !$0.isZero
@@ -123,14 +124,20 @@ private extension BikeComputerViewModel {
         gpsService.requestUserAuthorizationIfNeeded()
         gpsService.startUpdatingLocation()
 
-        gpsService.speed
-            .sink { [weak self] in
-                switch $0 {
-                case let .success(speed): self?.receiveGPSValue(speed)
-                case let .failure(error): self?.receiveGPSError(error)
-                }
-            }
+        bindGpsServie()
+    }
 
+    func bindGpsServie() {
+        gpsService.speed.sink(
+            receiveCompletion: { [weak self] completion in
+                guard case let .failure(error) = completion else { return }
+
+                // FIXME: We loose subscription on error
+                self?.receiveGPSError(error)
+            },
+            receiveValue: { [weak self] speed in
+                self?.receiveGPSValue(speed)
+            })
             .store(in: &subscriptions)
     }
 
@@ -138,14 +145,6 @@ private extension BikeComputerViewModel {
         shouldShowGPSSpeed = false
 
         switch error {
-        case .locationUnknown:
-            print("Couldn't read the location")
-            // Only show GPS speed if the BT Speed is not available
-            if shouldShowBTSpeed == false {
-                shouldShowGPSSpeed = true
-            }
-
-            gpsSpeed = "-"
         case .denied:
             print("Location services denied")
             onLocationDeniedReceived()
