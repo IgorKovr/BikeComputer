@@ -17,7 +17,12 @@ import CoreBluetooth
 //  Cumulative Crank revolutions: 2 bytes uint16
 //  Last crank event time: 2 bytes. uint16 (1/1024s)
 
-struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
+struct BluetoothSpeedAndCadenceDataPoint {
+
+    // MARK: - Constants
+    private let wheelFlagMask: UInt8 = 0b01
+    private let crankFlagMask: UInt8 = 0b10
+    private let timeScale = 1024.0
 
     // MARK: - Public properties
     let cumulativeWheelRevolutions: UInt32
@@ -31,20 +36,15 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
     private let lastCrankEventTime: TimeInterval
     private let wheelСircumference: Double
 
-    // MARK: - Constants
-    private let wheelFlagMask: UInt8 = 0b01
-    private let crankFlagMask: UInt8 = 0b10
-    private let timeScale = 1024.0
-
     init(_ data: NSData, wheelСircumference: Double) {
-
         self.wheelСircumference = wheelСircumference
+
         // Flags
-        var flags: UInt8=0
+        var flags: UInt8 = 0
         data.getBytes(&flags, range: NSRange(location: 0, length: 1))
 
-        isSpeedSensorAvailable = ((flags & wheelFlagMask) > 0)
-        isCadenceSensorAvailable = ((flags & crankFlagMask) > 0)
+        isSpeedSensorAvailable = (flags & wheelFlagMask) > 0
+        isCadenceSensorAvailable = (flags & crankFlagMask) > 0
 
         var wheel: UInt32 = 0
         var wheelTime: UInt16 = 0
@@ -74,28 +74,15 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
         }
 
         cumulativeWheelRevolutions = CFSwapInt32LittleToHost(wheel)
-        lastWheelEventTime = TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))/timeScale)
+        lastWheelEventTime = TimeInterval(Double(CFSwapInt16LittleToHost(wheelTime)) / timeScale)
         cumulativeCrankRevolutions = CFSwapInt16LittleToHost(crank)
-        lastCrankEventTime = TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))/timeScale)
+        lastCrankEventTime = TimeInterval(Double(CFSwapInt16LittleToHost(crankTime)) / timeScale)
     }
 
-    func timeIntervalForCurrentSample(_ current: TimeInterval, previous: TimeInterval ) -> TimeInterval {
-        var timeDiff: TimeInterval = 0
-        if current >= previous {
-            timeDiff = current - previous
-        } else {
-            // passed the maximum value
-            timeDiff = (TimeInterval((Double( UINT16_MAX) / timeScale)) - previous) + current
-        }
-        return timeDiff
-    }
-
-    func valuesForPreviousMeasurement(previousSample: BluetoothSpeedAndCadenceDataPoint?) -> ( cadenceinRPM: Double?, distanceinMeters: Double?, speedInMetersPerSecond: Double?)? {
+    func valuesForPreviousMeasurement(previousSample: BluetoothSpeedAndCadenceDataPoint?) -> (cadenceinRPM: Double?, distanceinMeters: Double?, speedInMetersPerSecond: Double?)? {
+        guard let previousSample = previousSample else { return nil }
 
         var distance: Double?, cadence: Double?, speed: Double?
-        guard let previousSample = previousSample else {
-            return nil
-        }
         if  isSpeedSensorAvailable && previousSample.isSpeedSensorAvailable {
             let wheelTimeDiff = timeIntervalForCurrentSample(lastWheelEventTime, previous: previousSample.lastWheelEventTime)
 
@@ -117,18 +104,23 @@ struct BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
         return (cadenceinRPM:cadence, distanceinMeters:distance, speedInMetersPerSecond:speed)
     }
 
-    var debugDescription: String {
-        """
-        Wheel Revs: \(cumulativeWheelRevolutions).
-        Last wheel event time: \(lastWheelEventTime).
-        Crank Revs: \(cumulativeCrankRevolutions).
-        Last Crank event time: \(lastCrankEventTime)
-        """
+    // MARK: - Private functions
+
+    private func timeIntervalForCurrentSample(_ current: TimeInterval, previous: TimeInterval) -> TimeInterval {
+        var timeDiff: TimeInterval = 0
+        if current >= previous {
+            timeDiff = current - previous
+        } else {
+            // passed the maximum value
+            timeDiff = (TimeInterval((Double( UINT16_MAX) / timeScale)) - previous) + current
+        }
+        return timeDiff
     }
+
 }
 
 extension BluetoothSpeedAndCadenceDataPoint {
-    func valueDiffForCurrentSample(_ current: Double, previous: Double, max: Double) -> Double {
+    private func valueDiffForCurrentSample(_ current: Double, previous: Double, max: Double) -> Double {
         var diff: Double = 0
         if   current >= previous {
             diff = current - previous
@@ -138,7 +130,7 @@ extension BluetoothSpeedAndCadenceDataPoint {
         return diff
     }
 
-    func valueDiffForCurrentSample(_ current: UInt32, previous: UInt32, max: UInt32) -> UInt32 {
+    private func valueDiffForCurrentSample(_ current: UInt32, previous: UInt32, max: UInt32) -> UInt32 {
         var diff: UInt32 = 0
         if   current >= previous {
             diff = current - previous
@@ -148,7 +140,7 @@ extension BluetoothSpeedAndCadenceDataPoint {
         return diff
     }
 
-    func valueDiffForCurrentSample(_ current: UInt16, previous: UInt16, max: UInt16) -> UInt16 {
+    private func valueDiffForCurrentSample(_ current: UInt16, previous: UInt16, max: UInt16) -> UInt16 {
         var diff: UInt16 = 0
         if current >= previous {
             diff = current - previous
@@ -156,5 +148,16 @@ extension BluetoothSpeedAndCadenceDataPoint {
             diff = (max - previous) + current
         }
         return diff
+    }
+}
+
+extension BluetoothSpeedAndCadenceDataPoint: CustomDebugStringConvertible {
+    var debugDescription: String {
+        """
+        Wheel Revs: \(cumulativeWheelRevolutions).
+        Last wheel event time: \(lastWheelEventTime).
+        Crank Revs: \(cumulativeCrankRevolutions).
+        Last Crank event time: \(lastCrankEventTime)
+        """
     }
 }

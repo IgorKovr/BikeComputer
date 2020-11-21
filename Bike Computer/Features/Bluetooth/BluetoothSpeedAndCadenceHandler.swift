@@ -2,19 +2,21 @@ import CoreBluetooth
 import Combine
 
 class BluetoothSpeedAndCadenceHandler: NSObject, BletoothDeviceHandling {
-
     // MARK: - Public Properties
 
     let uuid = CBUUID(string: "1816")
     var isConnected: Bool = false
     var cadence: Published<Double>.Publisher { $_cadence }
     @Published private var _cadence: Double = 0
+
     var speedInMetersPerSecond: Published<Double>.Publisher { $_speedInMetersPerSecond }
     @Published private var _speedInMetersPerSecond: Double = 0
+
     var distanceInMeters: Published<Double>.Publisher { $_distanceInMeters }
     @Published private var _distanceInMeters: Double = 0
 
     // MARK: - Private Properties
+
     private let measurementCharacteristicsCBUUID = CBUUID(string: "2a5b")
     private let featureCharacteristicsCBUUID = CBUUID(string: "2a5c")
     private let sensorLocationCharacteristicsCBUUID = CBUUID(string: "2a5d")
@@ -22,7 +24,7 @@ class BluetoothSpeedAndCadenceHandler: NSObject, BletoothDeviceHandling {
 
     /// Imperical value for wheel Circumference
     /// Diameter * Pi
-    /// ~ 680 * 3.14 (680 is a comon actual diameter for 700c wheel)
+    /// close to the value of 680 * 3.14, where 680 is a comon actual diameter for 700c wheel
     private let defaultWheelСircumferenceInMeters: Double = 2096/1000
 
     private var firstMeasurement: BluetoothSpeedAndCadenceDataPoint?
