@@ -30,7 +30,7 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     var speed: Published<Result<Double, GPSSerivceError>>.Publisher { $_speed }
 
     // MARK: - Private properties
-    @Published private var _speed: Result<Double, GPSSerivceError> = .success(0.0)
+    @Published private var _speed: Result<Double, GPSSerivceError> = .failure(.locationUnknown)
 
     private let locationManager: CLLocationManager
 

@@ -5,7 +5,6 @@ struct BikeComputerView: View {
     @ObservedObject var viewModel = BikeComputerViewModel()
 
     var body: some View {
-        
         VStack {
             if viewModel.shouldShowBTSpeed {
                 Group {
@@ -69,14 +68,13 @@ struct BikeComputerView: View {
                     .frame(maxWidth: .infinity)
             }
         }
-        .alert(isPresented: $viewModel.showsSettingsAlert) {
-                    Alert(title:
-                            Text("The Locatoin Services are disabled"),
-                          message: Text("Do you want to turn location on?"),
-                          primaryButton: .destructive(Text("Delete")) { viewModel.settingsAlertViewTappedOk()
-                          },
-                          secondaryButton: .cancel())
-                }
+        .alert(isPresented: $viewModel.alertProvider.shouldShowAlert ) {
+            guard let alert = viewModel.alertProvider.alert else {
+                fatalError("Alert not available")
+            }
+
+            return Alert(alert)
+        }
     }
 }
 

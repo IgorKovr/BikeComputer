@@ -19,8 +19,8 @@ class BikeComputerViewModel: ObservableObject {
     @Published var averageSpeed: String = ""
     @Published var distance: String = ""
     @Published var curentSessionTime: String = ""
-    
-    @Published var showsSettingsAlert: Bool = false
+
+    var alertProvider = AlertProvider()
 
     // MARK: - Private Properties
 
@@ -47,12 +47,6 @@ class BikeComputerViewModel: ObservableObject {
 
         bluetoothSensor.startBluetoothScan()
         startObservingBluetoothSensor()
-    }
-    
-    // MARK: Private functions
-    
-    func settingsAlertViewTappedOk() {
-        appSettingsHandler.openAppSettings()
     }
 
     // MARK: - Private Functions
@@ -150,16 +144,23 @@ private extension BikeComputerViewModel {
     }
 
     private func receiveGPSValue(_ speed: Double) {
-        shouldShowGPSSpeed = true
+        // Only show GPS speed if the BT Speed is not available
+        if shouldShowBTSpeed == false {
+            shouldShowGPSSpeed = true
+        }
         gpsSpeed = String(format: "%.1f", speed.kmph)
     }
 
     private func onLocationDeniedReceived() {
-        
-        // FIXME: Refactor Alert View showing
-        showsSettingsAlert = true
-//        showsSettingsAlert = false
-        
+        alertProvider.alert = AlertProvider.Alert(
+            title: "Turn the Location Service on?",
+            message: "We need the Location Service in order to display your curent speed",
+            primaryButtomText: "Ok",
+            primaryButtonAction: { [weak self] in
+                self?.appSettingsHandler.openAppSettings()
+            }
+        )
+
         gpsService.stopUpdatingLocation()
     }
 }
