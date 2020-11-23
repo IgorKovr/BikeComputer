@@ -26,15 +26,16 @@ protocol GPSSerivceProtocol {
 class GPSSerivce: NSObject, GPSSerivceProtocol {
     // MARK: - Public Propeties
 
-    // Manually expose speed publisher
     var speed: Published<Result<Double, GPSSerivceError>>.Publisher { $_speed }
 
     // MARK: - Private properties
+
     @Published private var _speed: Result<Double, GPSSerivceError> = .failure(.locationUnknown)
 
     private let locationManager: CLLocationManager
 
     // MARK: - Constants
+
     private let desiredAccuracy = kCLLocationAccuracyBest
     private let distanceFilter = kCLDistanceFilterNone
 
@@ -42,6 +43,7 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     let maxLocationAgeInSeconds = 10.0
 
     // MARK: - Initializer
+
     init (locationManager: CLLocationManager = CLLocationManager()) {
         self.locationManager = locationManager
 
@@ -52,7 +54,6 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
 
     // MARK: - Public Properties
 
-    // FIXME: Need to restart after User Grants Permission
     func startUpdatingLocation() {
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
@@ -68,6 +69,7 @@ class GPSSerivce: NSObject, GPSSerivceProtocol {
     }
 
     // MARK: - Private functions
+
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = desiredAccuracy
@@ -118,4 +120,3 @@ extension GPSSerivce: CLLocationManagerDelegate {
         }
     }
 }
-

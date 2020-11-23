@@ -78,7 +78,8 @@ class BikeComputerViewModel: ObservableObject {
             .store(in: &subscriptions)
 
         bluetoothSensor.distanceInMeters
-            .map { [weak self] in
+            .map {
+//                [weak self] in
 
                 // TODO: Enable in the next version
 //                self?.shouldShowDistance = !$0.isZero
