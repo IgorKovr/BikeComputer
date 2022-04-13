@@ -68,19 +68,19 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
     private func logBluetoothManagerState(_ state: CBManagerState) {
         switch state {
         case .unknown:
-            print("central.state is .unknown")
+            print("Core Bluetooth is initializing or resets")
         case .resetting:
-            print("central.state is .resetting")
+            print("Bluetooth is trying to reconnect")
         case .unsupported:
-            print("central.state is .unsupported")
+            print("Device doesn’t support the Bluetooth low energy central or client role")
         case .unauthorized:
-            print("central.state is .unauthorized")
+            print("Application isn’t authorized to use the Bluetooth low energy role")
         case .poweredOff:
-            print("central.state is .poweredOff")
+            print("Bluetooth is currently powered off")
         case .poweredOn:
-            print("central.state is .poweredOn")
+            print("Bluetooth is currently powered on and available to use")
         @unknown default:
-            print("central.state is unknown")
+            print("Bluetooth state is unknown")
         }
     }
 
