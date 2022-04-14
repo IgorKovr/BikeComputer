@@ -23,7 +23,7 @@ protocol BluetoothServiceProtocol {
     var speedInMetersPerSecond: Published<Double>.Publisher { get }
     var distanceInMeters: Published<Double>.Publisher { get }
 
-    func startBluetoothScan()
+    func startService()
 }
 
 class BluetoothService: NSObject, BluetoothServiceProtocol {
@@ -53,13 +53,13 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
         self.heartRatePeripheralHandler = heartRatePeripheralHandler
         self.bikePowerHandler = bikePowerHandler
 
-        services = [heartRatePeripheralHandler,
-                    bikePowerHandler]
+        services = [bikePowerHandler,
+                    heartRatePeripheralHandler]
     }
 
     // MARK: - Public Functions
 
-    func startBluetoothScan() {
+    func startService() {
         centralManager = CBCentralManager(delegate: self, queue: nil)
     }
 
@@ -84,13 +84,8 @@ class BluetoothService: NSObject, BluetoothServiceProtocol {
         }
     }
 
-    private func scanForNextService() {
-        if let unconnectedServices = services.first(where: { $0.isConnected == false}) {
-            currentServiceForScan = unconnectedServices
-            centralManager.scanForPeripherals(withServices: [unconnectedServices.uuid])
-        } else {
-            centralManager.stopScan()
-        }
+    private func startScanning() {
+        centralManager.scanForPeripherals(withServices: services.map {$0.uuid} )
     }
 }
 
@@ -101,7 +96,7 @@ extension BluetoothService: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            scanForNextService()
+            startScanning()
         default: break
         }
 
@@ -113,20 +108,13 @@ extension BluetoothService: CBCentralManagerDelegate {
         print("Discovered peripheral: \n \(peripheral)")
 
         supportedPeripherals.append(peripheral)
-        peripheral.delegate = currentServiceForScan
-
-        centralManager.stopScan()
         centralManager.connect(peripheral)
+        peripheral.delegate = self
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected peripheral: \n \(peripheral)")
-
-        guard let currentServiceForScan = currentServiceForScan else { return }
-
-        peripheral.discoverServices([currentServiceForScan.uuid])
-        currentServiceForScan.isConnected = true
-        scanForNextService()
+        peripheral.discoverServices(services.map {$0.uuid})
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -135,6 +123,54 @@ extension BluetoothService: CBCentralManagerDelegate {
         })
 
         disconnectedService?.isConnected = false
-        scanForNextService()
+        startScanning()
+    }
+}
+
+extension BluetoothService: CBPeripheralDelegate {
+
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Received an Error in didUpdateNotificationState \(error)")
+
+            return
+        }
+
+        print("notification status changed for [\(characteristic.uuid)]...")
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        guard let services = peripheral.services else { return }
+        for service in services {
+            print(service)
+            peripheral.discoverCharacteristics(nil, for: service)
+        }
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+
+        if service.uuid == bikePowerHandler.uuid {
+            print("Connecting Speed and Cadence Sensor")
+            peripheral.delegate = bikePowerHandler
+            bikePowerHandler.isConnected = true
+            centralManager.connect(peripheral)
+        }
+
+
+        if service.uuid == heartRatePeripheralHandler.uuid {
+            print("Connecting HR Sensor")
+            peripheral.delegate = heartRatePeripheralHandler
+            heartRatePeripheralHandler.isConnected = true
+            centralManager.connect(peripheral)
+        }
+
+        // If all services are connected stop scanning
+        if services.first(where: { $0.isConnected == false}) == nil {
+            centralManager.stopScan()
+        }
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        print("Should not read values in BluetoothService. Re-Assign the delegate.")
     }
 }
