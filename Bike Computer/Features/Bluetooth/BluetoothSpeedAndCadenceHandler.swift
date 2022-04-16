@@ -4,7 +4,7 @@ import Combine
 class BluetoothSpeedAndCadenceHandler: NSObject, BletoothDeviceHandling {
     // MARK: - Public Properties
 
-    let uuid = CBUUID(string: "1816")
+    let uuid = CBUUID(string: "0x1816")
     var isConnected: Bool = false
     var cadence: Published<Double>.Publisher { $_cadence }
     @Published private var _cadence: Double = 0
