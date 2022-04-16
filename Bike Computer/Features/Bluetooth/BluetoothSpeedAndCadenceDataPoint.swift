@@ -82,15 +82,19 @@ struct BluetoothSpeedAndCadenceDataPoint {
     func valuesForPreviousMeasurement(previousSample: BluetoothSpeedAndCadenceDataPoint?) -> (cadenceinRPM: Double?, distanceinMeters: Double?, speedInMetersPerSecond: Double?)? {
         guard let previousSample = previousSample else { return nil }
 
-        var distance: Double?, cadence: Double?, speed: Double?
+        var distance: Double?, cadence: Double?, speedInMs: Double?
         if  isSpeedSensorAvailable && previousSample.isSpeedSensorAvailable {
             let wheelTimeDiff = timeIntervalForCurrentSample(lastWheelEventTime, previous: previousSample.lastWheelEventTime)
 
             let valueDiff = valueDiffForCurrentSample(cumulativeWheelRevolutions, previous: previousSample.cumulativeWheelRevolutions, max: UInt32.max)
 
+            if valueDiff == 0 || wheelTimeDiff == 0 {
+                return nil
+            }
+
             distance = Double(valueDiff) * wheelСircumference // distance in meters
             if  distance != nil  &&  wheelTimeDiff > 0 {
-                speed = (wheelTimeDiff == 0 ) ? 0 : distance! / wheelTimeDiff // m/s
+                speedInMs = distance! / wheelTimeDiff // m/s
             }
         }
 
@@ -100,8 +104,8 @@ struct BluetoothSpeedAndCadenceDataPoint {
 
             cadence = (crankDiffTime == 0) ? nil : Double(60.0 * valueDiff / crankDiffTime) // RPM
         }
-        print("Cadence: \(String(describing: cadence)) RPM. Distance: \(String(describing: distance)) meters. Speed: \(String(describing: speed)) Km/h")
-        return (cadenceinRPM:cadence, distanceinMeters:distance, speedInMetersPerSecond:speed)
+        print("Cadence: \(String(describing: cadence)) RPM. Distance: \(String(describing: distance)) meters. Speed: \(String(describing: speedInMs)) M/s")
+        return (cadenceinRPM:cadence, distanceinMeters: distance, speedInMetersPerSecond: speedInMs)
     }
 
     // MARK: - Private functions

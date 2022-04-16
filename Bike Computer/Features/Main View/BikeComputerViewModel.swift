@@ -45,7 +45,7 @@ class BikeComputerViewModel: ObservableObject {
         setupTimer()
         startGpsService()
 
-        bluetoothSensor.startBluetoothScan()
+        bluetoothSensor.startService()
         startObservingBluetoothSensor()
     }
 
@@ -63,7 +63,8 @@ class BikeComputerViewModel: ObservableObject {
         bluetoothSensor.speedInMetersPerSecond
             .map { [weak self] in
                 self?.shouldShowBTSpeed = !$0.isZero
-                self?.shouldShowGPSSpeed = $0.isZero
+                // TODO: Hide GPS when BT Speed  Sensor is available
+//                self?.shouldShowGPSSpeed = $0.isZero
                 return String(format: "%.1f", $0.kmph)
             }
             .assign(to: \.speedBT, on: self)
