@@ -72,6 +72,7 @@ struct BikeComputerView: View {
                     .frame(maxWidth: .infinity)
             }
         }
+        .preferredColorScheme(.dark)
         .alert(isPresented: $viewModel.alertProvider.shouldShowAlert ) {
             guard let alert = viewModel.alertProvider.alert else {
                 fatalError("Alert not available")
