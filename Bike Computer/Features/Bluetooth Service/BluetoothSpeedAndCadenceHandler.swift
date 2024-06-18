@@ -22,7 +22,7 @@ class BluetoothSpeedAndCadenceHandler: NSObject, BletoothDeviceHandling {
     private let sensorLocationCharacteristicsCBUUID = CBUUID(string: "2a5d")
     private let controlPointCBUUID = CBUUID(string: "2a55")
 
-    /// Imperical value for wheel Circumference
+    /// Imperical (actual measured) value of wheel circumference
     /// Diameter * Pi
     /// close to the value of 680 * 3.14, where 680 is a comon actual diameter for 700c wheel
     private let defaultWheelСircumferenceInMeters: Double = 2096/1000

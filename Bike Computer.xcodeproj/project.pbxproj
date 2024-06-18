@@ -29,6 +29,7 @@
 		09B97A89249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */; };
 		09B97A8B249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8A249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift */; };
 		09B97A8D249CF1370051AD99 /* TimeIntervalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B97A8C249CF1370051AD99 /* TimeIntervalExtension.swift */; };
+		B1DA426E2C21C961009BCF39 /* GPSSerivceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DA426D2C21C961009BCF39 /* GPSSerivceMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSpeedAndCadenceHandler.swift; sourceTree = "<group>"; };
 		09B97A8A249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSpeedAndCadenceDataPoint.swift; sourceTree = "<group>"; };
 		09B97A8C249CF1370051AD99 /* TimeIntervalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtension.swift; sourceTree = "<group>"; };
+		B1DA426D2C21C961009BCF39 /* GPSSerivceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSSerivceMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,13 +215,13 @@
 			isa = PBXGroup;
 			children = (
 				098F6EFA25681189003C2F35 /* Main View */,
-				098E963F24771AAA00046FCF /* GPSService.swift */,
-				09B97A84249A55100051AD99 /* Bluetooth */,
+				B1DA426C2C21C947009BCF39 /* GPS Service */,
+				09B97A84249A55100051AD99 /* Bluetooth Service */,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
-		09B97A84249A55100051AD99 /* Bluetooth */ = {
+		09B97A84249A55100051AD99 /* Bluetooth Service */ = {
 			isa = PBXGroup;
 			children = (
 				09B97A8224992A840051AD99 /* BluetoothService.swift */,
@@ -227,7 +229,16 @@
 				09B97A88249BBE380051AD99 /* BluetoothSpeedAndCadenceHandler.swift */,
 				09B97A8A249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift */,
 			);
-			path = Bluetooth;
+			path = "Bluetooth Service";
+			sourceTree = "<group>";
+		};
+		B1DA426C2C21C947009BCF39 /* GPS Service */ = {
+			isa = PBXGroup;
+			children = (
+				098E963F24771AAA00046FCF /* GPSService.swift */,
+				B1DA426D2C21C961009BCF39 /* GPSSerivceMock.swift */,
+			);
+			path = "GPS Service";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -360,6 +371,7 @@
 				09B97A8B249BD9180051AD99 /* BluetoothSpeedAndCadenceDataPoint.swift in Sources */,
 				09135DA023F1610F00601377 /* BikeComputerViewModel.swift in Sources */,
 				098E964024771AAA00046FCF /* GPSService.swift in Sources */,
+				B1DA426E2C21C961009BCF39 /* GPSSerivceMock.swift in Sources */,
 				094DDDFC23E9C50500EA1951 /* AppDelegate.swift in Sources */,
 				09B97A86249A55900051AD99 /* BluetoothHeartRateHandler.swift in Sources */,
 				094DDDFE23E9C50500EA1951 /* SceneDelegate.swift in Sources */,
